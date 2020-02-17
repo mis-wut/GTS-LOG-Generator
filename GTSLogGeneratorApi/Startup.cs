@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using GTSLogGeneratorApi.Extensions.ServiceCollectionExtensions;
 using GTSLogGeneratorApi.Jobs;
+using GTSLogGeneratorApi.Mappers;
 using Hangfire;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -31,6 +32,7 @@ namespace GTSLogGeneratorApi
             services.AddMemoryHangfire();
 
             services.AddScoped<ILogsGenerationJob, LogsGenerationJob>();
+            services.AddScoped<ILogsGenerationParametersMapper, LogsGenerationParametersMapper>();
 
             services.AddSwaggerGen(c =>
             {

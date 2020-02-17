@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using GTSLogGeneratorApi.Jobs;
+using GTSLogGeneratorApi.Mappers;
 using Hangfire;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,19 +15,32 @@ namespace GTSLogGeneratorApi.Controllers
     {
         private readonly IRecurringJobManager _recurringJobManager;
         private readonly ILogsGenerationJob _logsGenerationJob;
+        private readonly ILogsGenerationParametersMapper _parametersMapper;
 
         public LogsGenerationController(IRecurringJobManager recurringJobManager,
-            ILogsGenerationJob logsGenerationJob)
+            ILogsGenerationJob logsGenerationJob,
+            ILogsGenerationParametersMapper parametersMapper)
         {
             _recurringJobManager = recurringJobManager;
             _logsGenerationJob = logsGenerationJob;
+            _parametersMapper = parametersMapper;
         }
 
         [HttpPut]
         [Route("UpdateLogGenerationJob")]
-        public ActionResult UpdateLogGenerationJob(LogsGenerationParameters parameters)
+        public ActionResult UpdateLogGenerationJob(UpdateLogsGenerationJobRequest request)
         {
-            _recurringJobManager.AddOrUpdate(LogsGenerationJob.Id, () => _logsGenerationJob.Execute(parameters), $"*/{parameters.Interval} * * * * *");
+            if (request.IsActive)
+            {
+                var parameters = _parametersMapper.Map(request);
+                _recurringJobManager.AddOrUpdate(LogsGenerationJob.Id, () => _logsGenerationJob.Execute(parameters),
+                    $"*/{request.Interval} * * * * *");
+            }
+            else
+            {
+                _recurringJobManager.RemoveIfExists(LogsGenerationJob.Id);
+            }
+
             return Ok();
         }
     }
