@@ -1,6 +1,6 @@
 namespace GTSLogGeneratorApi.Controllers
 {
-    public class UpdateLogsGenerationJobRequest
+    public class LogsGenerationParametersResponse
     {
         public bool IsActive { get; set; }
 

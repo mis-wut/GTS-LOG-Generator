@@ -28,13 +28,16 @@ namespace GTSLogGeneratorApi.Mappers
 
         public LogsGenerationParameters Map(UpdateLogsGenerationJobRequest source)
         {
+            var path = source.Path.EndsWith("/") ? source.Path : $"{source.Path}/";
             return new LogsGenerationParameters
             {
-                Channels = Channels.GetRandom(source.ChannelsNumber),
-                Providers = Providers.GetRandom(source.ProvidersNumber),
-                Cities = CitiesNumber.GetRandom(source.CitiesNumber),
-                LogsNumber = source.LogsNumber,
-                Path = source.Path
+                IsActive = source.IsActive,
+                Interval = source.Interval,
+                Channels = Channels.GetRandom(source.ChannelsCount),
+                Providers = Providers.GetRandom(source.ProvidersCount),
+                Cities = CitiesNumber.GetRandom(source.CitiesCount),
+                LogsCount = source.LogsCount,
+                Path = path
             };
         }
     }

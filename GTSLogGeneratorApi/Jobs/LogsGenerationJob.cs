@@ -10,15 +10,16 @@ namespace GTSLogGeneratorApi.Jobs
     public class LogsGenerationJob : ILogsGenerationJob
     {
         public static string Id = "LogsGenerationJob";
-        
+
+        public static LogsGenerationParameters Parameters { get; set; }
 
         public Task Execute(LogsGenerationParameters parameters)
         {
             var timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-
+            
             using (StreamWriter file = new StreamWriter($"{parameters.Path}/{timestamp}.log"))
             {
-                for (var i = 1; i <= parameters.LogsNumber; i++)
+                for (var i = 1; i <= parameters.LogsCount; i++)
                 {
                     var channel = parameters.Channels.GetRandomElement(i);
                     var city = parameters.Cities.GetRandomElement(i);

@@ -16,23 +16,28 @@ namespace GTSLogGeneratorApi.Controllers
         private readonly IRecurringJobManager _recurringJobManager;
         private readonly ILogsGenerationJob _logsGenerationJob;
         private readonly ILogsGenerationParametersMapper _parametersMapper;
+        private readonly ILogsGenerationParametersResponseMapper _jobParametersMapper;
 
         public LogsGenerationController(IRecurringJobManager recurringJobManager,
             ILogsGenerationJob logsGenerationJob,
-            ILogsGenerationParametersMapper parametersMapper)
+            ILogsGenerationParametersMapper parametersMapper,
+            ILogsGenerationParametersResponseMapper jobParametersMapper)
         {
             _recurringJobManager = recurringJobManager;
             _logsGenerationJob = logsGenerationJob;
             _parametersMapper = parametersMapper;
+            _jobParametersMapper = jobParametersMapper;
         }
 
         [HttpPut]
         [Route("UpdateLogGenerationJob")]
         public ActionResult UpdateLogGenerationJob(UpdateLogsGenerationJobRequest request)
         {
+            var parameters = _parametersMapper.Map(request);
+            LogsGenerationJob.Parameters = parameters;
+            
             if (request.IsActive)
             {
-                var parameters = _parametersMapper.Map(request);
                 _recurringJobManager.AddOrUpdate(LogsGenerationJob.Id, () => _logsGenerationJob.Execute(parameters),
                     $"*/{request.Interval} * * * * *");
             }
@@ -40,8 +45,15 @@ namespace GTSLogGeneratorApi.Controllers
             {
                 _recurringJobManager.RemoveIfExists(LogsGenerationJob.Id);
             }
-
+            
             return Ok();
+        }
+        
+        [HttpGet]
+        [Route("GetLogGenerationJobParameters")]
+        public ActionResult<LogsGenerationParametersResponse> GetLogGenerationJobParameters()
+        {
+            return _jobParametersMapper.Map(LogsGenerationJob.Parameters);
         }
     }
 }

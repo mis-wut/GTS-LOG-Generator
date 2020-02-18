@@ -30,9 +30,17 @@ namespace GTSLogGeneratorApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMemoryHangfire();
+            
+            services.AddCors(options => options.AddPolicy("ApiCorsPolicy", builder =>
+            {
+                builder.AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader();
+            }));
 
             services.AddScoped<ILogsGenerationJob, LogsGenerationJob>();
             services.AddScoped<ILogsGenerationParametersMapper, LogsGenerationParametersMapper>();
+            services.AddScoped<ILogsGenerationParametersResponseMapper, LogsGenerationParametersResponseMapper>();
 
             services.AddSwaggerGen(c =>
             {
@@ -48,6 +56,7 @@ namespace GTSLogGeneratorApi
             app.UseHangfireDashboard();
 
             app.UseSwagger();
+            app.UseCors("ApiCorsPolicy");
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "GTS-Log Generator");
