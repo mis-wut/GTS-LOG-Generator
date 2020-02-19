@@ -21,7 +21,7 @@ namespace GTSLogGeneratorApi
             WebHost.CreateDefaultBuilder(args)
                 .UseKestrel()
                 .UseContentRoot(Directory.GetCurrentDirectory())
-                .UseUrls("http://0.0.0.0:80")
+                .UseUrls("http://0.0.0.0:5000")
                 .UseStartup<Startup>();
     }
 }
