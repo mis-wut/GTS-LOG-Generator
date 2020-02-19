@@ -19,6 +19,9 @@ namespace GTSLogGeneratorApi
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
+                .UseKestrel()
+                .UseContentRoot(Directory.GetCurrentDirectory())
+                .UseUrls("http://0.0.0.0:80")
                 .UseStartup<Startup>();
     }
 }
