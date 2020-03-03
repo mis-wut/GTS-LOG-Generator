@@ -109,7 +109,7 @@ export default {
     providersCount: 2,
     citiesCount: 5,
     interval: 3,
-    logsCount: 200000,
+    logsCount: 20000,
     hitProbability: 50,
     snackbar: false,
     snackbarText: "Saved successfully!",
