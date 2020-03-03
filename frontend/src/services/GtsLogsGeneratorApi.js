@@ -1,6 +1,10 @@
 import axios from "axios";
 
 export default {
+  getTerminalUrl() {
+    return `http://localhost:2222/ssh/host/test.rebex.net`;
+  },
+
   getInfluxDbUrl() {
     return `http://${process.env.VUE_APP_HOST}:9999/`;
   },

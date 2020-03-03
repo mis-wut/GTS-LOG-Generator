@@ -1,7 +1,12 @@
 <template>
-  <v-app-bar app color="primary" dark>
+  <v-app-bar
+    :clipped-left="$vuetify.breakpoint.lgAndUp"
+    app
+    color="blue darken-3"
+    dark
+  >
     <v-toolbar-title>
-      <span class="toolbar-title">GTS-Log Generator</span>
+      <span class="toolbar-title">GTS-Log</span>
     </v-toolbar-title>
   </v-app-bar>
 </template>
