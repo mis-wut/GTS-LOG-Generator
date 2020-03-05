@@ -21,11 +21,11 @@ namespace GTSLogGeneratorApi.Jobs
             {
                 for (var i = 1; i <= parameters.LogsCount; i++)
                 {
-                    var channel = parameters.Channels.GetRandomElement(i);
-                    var city = parameters.Cities.GetRandomElement(i);
-                    var provider = parameters.Providers.GetRandomElement(i);
+                    var channel = parameters.Channels.GetRandomElement();
+                    var city = parameters.Cities.GetRandomElement();
+                    var provider = parameters.Providers.GetRandomElement();
                     
-                    file.WriteLine($"\"2020-02-10T17:15:58+02:00\"\"90.84.143.49\"\"nginx:\"\"{city}\"\"-\"\"[10/Feb/2020:17:15:58 +0000]\"\"GET\"\"http://test.com/myvideo/download/{provider}/{channel}//\"\"HTTP/1.1\"\"200\"\"1000\"\"AffxVbxfwindowsxdCAECv\"\"{timestamp}");
+                    file.WriteLine($"\"2020-02-10T17:15:58+02:00\"\"90.84.143.49\"\"nginx:\"\"{city}\"\"-\"\"[10/Feb/2020:17:15:58 +0000]\"\"GET\"\"http://test.com/myvideo/download/{channel}/{provider}//\"\"HTTP/1.1\"\"200\"\"1000\"\"AffxVbxfwindowsxdCAECv\"\"{timestamp}");
                 }
             }
             

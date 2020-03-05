@@ -6,11 +6,10 @@ namespace GTSLogGeneratorApi.Extensions
 {
     public static class EnumerableExtensions
     {
+        private static Random random = new Random();
 
         public static List<T> GetRandom<T>(this List<T> list, int numItems)
         {
-            var random = new Random();
-
             var items = new HashSet<T>();
             while (numItems > 0)
             {
@@ -22,10 +21,9 @@ namespace GTSLogGeneratorApi.Extensions
 
             return items.ToList();
         }
-        
-        public static T GetRandomElement<T>(this List<T> items, int seedMultiply)
+
+        public static T GetRandomElement<T>(this List<T> items)
         {
-            var random = new Random(Environment.TickCount * seedMultiply);
             return items[random.Next(0, items.Count)];
         }
     }
