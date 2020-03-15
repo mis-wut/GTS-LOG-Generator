@@ -26,7 +26,7 @@
             <v-list-item-title>InfluxDb</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item to="/settings">
+        <v-list-item to="/settings" v-show="false">
           <v-list-item-action>
             <v-icon>settings</v-icon>
           </v-list-item-action>
