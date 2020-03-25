@@ -35,20 +35,33 @@ namespace GTSLogGeneratorApi.Controllers
         {
             var parameters = _parametersMapper.Map(request);
             LogsGenerationJob.Parameters = parameters;
-            
+
             if (request.IsActive)
             {
-                _recurringJobManager.AddOrUpdate(LogsGenerationJob.Id, () => _logsGenerationJob.Execute(parameters),
-                    $"*/{request.Interval} * * * * *");
+                if (parameters.Interval < 60)
+                {
+                    _recurringJobManager.AddOrUpdate(LogsGenerationJob.Id, () => _logsGenerationJob.Execute(parameters),
+                        $"*/{request.Interval} * * * * *");
+                }
+                else if (request.Interval < 3600)
+                {
+                    _recurringJobManager.AddOrUpdate(LogsGenerationJob.Id, () => _logsGenerationJob.Execute(parameters),
+                        $"* */{request.Interval / 60} * * * *");
+                }
+                else
+                {
+                    _recurringJobManager.AddOrUpdate(LogsGenerationJob.Id, () => _logsGenerationJob.Execute(parameters),
+                        $"* * *{request.Interval / 3600} * * *");
+                }
             }
             else
             {
                 _recurringJobManager.RemoveIfExists(LogsGenerationJob.Id);
             }
-            
+
             return Ok();
         }
-        
+
         [HttpGet]
         [Route("GetLogGenerationJobParameters")]
         public ActionResult<LogsGenerationParametersResponse> GetLogGenerationJobParameters()

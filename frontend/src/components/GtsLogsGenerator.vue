@@ -6,22 +6,17 @@
       <v-form v-model="valid">
         <v-checkbox v-model="isActive" label="Active"></v-checkbox>
 
-        <v-text-field
-          v-model="path"
-          :rules="pathRules"
-          label="Logs folder path:"
-          required
-        ></v-text-field>
+        <v-text-field v-model="path" :rules="pathRules" label="Logs folder path:" required></v-text-field>
 
         <v-subheader class="pl-0">Generation interval (seconds):</v-subheader>
-        <v-slider
+        <v-text-field
           v-model="interval"
-          :thumb-size="24"
-          thumb-label="always"
-          min="1"
-          max="10"
-          tick-size="4"
-        ></v-slider>
+          class="mt-0 pt-0"
+          hide-details
+          single-line
+          type="number"
+          style="width: 120px"
+        ></v-text-field>
 
         <v-subheader class="pl-0">Logs per generation:</v-subheader>
         <v-slider v-model="logsCount" min="1" max="1000000" height="40px">
@@ -38,42 +33,18 @@
         </v-slider>
 
         <v-subheader class="pl-0">Hit probability:</v-subheader>
-        <v-slider
-          v-model="hitProbability"
-          :thumb-size="36"
-          thumb-label="always"
-          min="0"
-          max="100"
-        >
+        <v-slider v-model="hitProbability" :thumb-size="36" thumb-label="always" min="0" max="100">
           <span slot="thumb-label" slot-scope="{ value }">{{ value }} %</span>
         </v-slider>
 
         <v-subheader class="pl-0">Number of channels:</v-subheader>
-        <v-slider
-          v-model="channelsCount"
-          :thumb-size="24"
-          thumb-label="always"
-          min="1"
-          max="10"
-        ></v-slider>
+        <v-slider v-model="channelsCount" :thumb-size="24" thumb-label="always" min="1" max="10"></v-slider>
 
         <v-subheader class="pl-0">Number of cities:</v-subheader>
-        <v-slider
-          v-model="citiesCount"
-          :thumb-size="24"
-          thumb-label="always"
-          min="1"
-          max="10"
-        ></v-slider>
+        <v-slider v-model="citiesCount" :thumb-size="24" thumb-label="always" min="1" max="10"></v-slider>
 
         <v-subheader class="pl-0">Number of providers:</v-subheader>
-        <v-slider
-          v-model="providersCount"
-          :thumb-size="24"
-          thumb-label="always"
-          min="1"
-          max="5"
-        ></v-slider>
+        <v-slider v-model="providersCount" :thumb-size="24" thumb-label="always" min="1" max="5"></v-slider>
       </v-form>
     </v-card-text>
 
@@ -81,13 +52,7 @@
       <v-btn :disabled="!valid" color="success" @click="save">Save</v-btn>
     </v-card-actions>
 
-    <v-snackbar
-      v-model="snackbar"
-      :timeout="snackbarTimeout"
-      bottom
-      right
-      :color="snackbarColor"
-    >
+    <v-snackbar v-model="snackbar" :timeout="snackbarTimeout" bottom right :color="snackbarColor">
       {{ snackbarText }}
       <v-btn dark text @click="snackbar = false">Close</v-btn>
     </v-snackbar>
