@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Diagnostics;
 using System.IO;
-using System.Threading;
 using System.Threading.Tasks;
+using GTSLogGeneratorApi.Application.Models;
 using GTSLogGeneratorApi.Infrastructure.Extensions;
 
 namespace GTSLogGeneratorApi.Application.Jobs
@@ -10,8 +9,6 @@ namespace GTSLogGeneratorApi.Application.Jobs
     public class LogsGenerationJob : ILogsGenerationJob
     {
         public static string Id = "LogsGenerationJob";
-
-        public static LogsGenerationParameters Parameters { get; set; }
 
         public Task Execute(LogsGenerationParameters parameters)
         {

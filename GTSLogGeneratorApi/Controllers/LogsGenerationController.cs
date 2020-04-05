@@ -1,7 +1,5 @@
 ﻿using System.Threading.Tasks;
-using GTSLogGeneratorApi.Application.GetConfigRequest;
 using GTSLogGeneratorApi.Application.GetLogsGenerationParametersRequest;
-using GTSLogGeneratorApi.Application.UpdateConfigRequest;
 using GTSLogGeneratorApi.Application.UpdateLogsGenerationJobRequest;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -12,7 +10,7 @@ namespace GTSLogGeneratorApi.Controllers
     [ApiController]
     public class LogsGenerationController : ControllerBase
     {
-        private IMediator _mediator;
+        private readonly IMediator _mediator;
 
         public LogsGenerationController(IMediator mediator)
         {

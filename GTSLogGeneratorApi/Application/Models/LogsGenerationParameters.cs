@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace GTSLogGeneratorApi.Application.Jobs
+namespace GTSLogGeneratorApi.Application.Models
 {
     public class LogsGenerationParameters
     {

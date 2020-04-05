@@ -1,8 +1,6 @@
-using MediatR;
-
-namespace GTSLogGeneratorApi.Application.UpdateConfigRequest
+namespace GTSLogGeneratorApi.Application.GetConfigRequest
 {
-    public class UpdateConfigRequest : IRequest
+    public class GetConfigResponse
     {
         public string ConfigFilePath { get; set; }
         
@@ -24,6 +22,6 @@ namespace GTSLogGeneratorApi.Application.UpdateConfigRequest
         
         public string InfluxdbSystemMetricsBucket { get; set; }
         
-        public string InfluxdbAuthToken { get; set; }
+        public string InfxludbAuthToken { get; set; }
     }
 }

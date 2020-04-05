@@ -1,24 +1,24 @@
-using System.Threading;
-using System.Threading.Tasks;
-using GTSLogGeneratorApi.Application.Jobs;
-using GTSLogGeneratorApi.Controllers;
+using GTSLogGeneratorApi.Application.Models;
 using GTSLogGeneratorApi.Infrastructure.Services;
 using MediatR;
 
 namespace GTSLogGeneratorApi.Application.GetLogsGenerationParametersRequest
 {
-    public class GetLogsGenerationParametersRequestHandler : IRequestHandler<GetLogsGenerationParametersRequest, GetLogsGenerationParametersResponse>
+    public class GetLogsGenerationParametersRequestHandler : RequestHandler<GetLogsGenerationParametersRequest, GetLogsGenerationParametersResponse>
     {
         private readonly IMapper<LogsGenerationParameters, GetLogsGenerationParametersResponse> _parametersMapper;
+        private readonly LogsGenerationParameters _parameters;
 
-        public GetLogsGenerationParametersRequestHandler(IMapper<LogsGenerationParameters, GetLogsGenerationParametersResponse> parametersMapper)
+        public GetLogsGenerationParametersRequestHandler(IMapper<LogsGenerationParameters, GetLogsGenerationParametersResponse> parametersMapper, 
+            LogsGenerationParameters parameters)
         {
             _parametersMapper = parametersMapper;
+            _parameters = parameters;
         }
 
-        public Task<GetLogsGenerationParametersResponse> Handle(GetLogsGenerationParametersRequest request, CancellationToken cancellationToken)
+        protected override GetLogsGenerationParametersResponse Handle(GetLogsGenerationParametersRequest request)
         {
-            return Task.FromResult(_parametersMapper.Map(LogsGenerationJob.Parameters));
+            return _parametersMapper.Map(_parameters);
         }
     }
 }

@@ -1,33 +1,30 @@
-using System.Threading;
-using System.Threading.Tasks;
 using GTSLogGeneratorApi.Application.Jobs;
-using GTSLogGeneratorApi.Infrastructure.Services;
+using GTSLogGeneratorApi.Application.Models;
 using Hangfire;
 using MediatR;
 
 namespace GTSLogGeneratorApi.Application.UpdateLogsGenerationJobRequest
 {
-    public class UpdateLogsGenerationJobRequestHandler : AsyncRequestHandler<UpdateLogsGenerationJobRequest>
+    public class UpdateLogsGenerationJobRequestHandler : RequestHandler<UpdateLogsGenerationJobRequest>
     {
         private readonly IRecurringJobManager _recurringJobManager;
         private readonly ILogsGenerationJob _logsGenerationJob;
-        private readonly IMapper<UpdateLogsGenerationJobRequest, LogsGenerationParameters> _parametersMapper;
-
+        private readonly ILogsGenerationJobParametersUpdater _parametersUpdater;
+        
         public UpdateLogsGenerationJobRequestHandler(IRecurringJobManager recurringJobManager, 
-            ILogsGenerationJob logsGenerationJob, 
-            IMapper<UpdateLogsGenerationJobRequest, LogsGenerationParameters> parametersMapper)
+            ILogsGenerationJob logsGenerationJob,
+            ILogsGenerationJobParametersUpdater parametersUpdater)
         {
             _recurringJobManager = recurringJobManager;
             _logsGenerationJob = logsGenerationJob;
-            _parametersMapper = parametersMapper;
+            _parametersUpdater = parametersUpdater;
         }
 
-        protected override Task Handle(UpdateLogsGenerationJobRequest request, CancellationToken cancellationToken)
+        protected override void Handle(UpdateLogsGenerationJobRequest request)
         {
-            var parameters = _parametersMapper.Map(request);
-            LogsGenerationJob.Parameters = parameters;
+            var parameters = _parametersUpdater.Update(request);
             
-            if (parameters.IsActive)
+            if (request.IsActive)
             {
                 UpdateGenerationJobInterval(parameters);
             }
@@ -35,10 +32,8 @@ namespace GTSLogGeneratorApi.Application.UpdateLogsGenerationJobRequest
             {
                 _recurringJobManager.RemoveIfExists(LogsGenerationJob.Id);
             }
-
-            return Task.CompletedTask;
         }
-        
+
         private void UpdateGenerationJobInterval(LogsGenerationParameters parameters)
         {
             if (parameters.Interval < 60)

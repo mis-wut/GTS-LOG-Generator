@@ -1,8 +1,6 @@
-using MediatR;
-
-namespace GTSLogGeneratorApi.Application.UpdateConfigRequest
+namespace GTSLogGeneratorApi.Application.Models
 {
-    public class UpdateConfigRequest : IRequest
+    public class ConfigParameters
     {
         public string ConfigFilePath { get; set; }
         

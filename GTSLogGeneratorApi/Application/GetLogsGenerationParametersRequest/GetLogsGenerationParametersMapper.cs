@@ -1,5 +1,4 @@
-using GTSLogGeneratorApi.Application.Jobs;
-using GTSLogGeneratorApi.Controllers;
+using GTSLogGeneratorApi.Application.Models;
 using GTSLogGeneratorApi.Infrastructure.Services;
 
 namespace GTSLogGeneratorApi.Application.GetLogsGenerationParametersRequest
@@ -8,7 +7,7 @@ namespace GTSLogGeneratorApi.Application.GetLogsGenerationParametersRequest
     {
         public GetLogsGenerationParametersResponse Map(LogsGenerationParameters source)
         {
-            if (source == null)
+            if (source.Path == null)
             {
                 return null;
             }

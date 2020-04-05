@@ -1,4 +1,3 @@
-using GTSLogGeneratorApi.Controllers;
 using MediatR;
 
 namespace GTSLogGeneratorApi.Application.GetLogsGenerationParametersRequest
