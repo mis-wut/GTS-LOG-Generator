@@ -1,25 +1,19 @@
-using System.Collections.Generic;
+using GTSLogGeneratorApi.Application.Jobs;
 using GTSLogGeneratorApi.Controllers;
-using GTSLogGeneratorApi.Extensions;
-using GTSLogGeneratorApi.Jobs;
+using GTSLogGeneratorApi.Infrastructure.Services;
 
-namespace GTSLogGeneratorApi.Mappers
+namespace GTSLogGeneratorApi.Application.GetLogsGenerationParametersRequest
 {
-    public interface ILogsGenerationParametersResponseMapper
+    public class GetLogsGenerationParametersMapper : IMapper<LogsGenerationParameters, GetLogsGenerationParametersResponse>
     {
-        LogsGenerationParametersResponse Map(LogsGenerationParameters source);
-    }
-
-    public class LogsGenerationParametersResponseMapper : ILogsGenerationParametersResponseMapper
-    {
-        public LogsGenerationParametersResponse Map(LogsGenerationParameters source)
+        public GetLogsGenerationParametersResponse Map(LogsGenerationParameters source)
         {
             if (source == null)
             {
                 return null;
             }
             
-            return new LogsGenerationParametersResponse()
+            return new GetLogsGenerationParametersResponse()
             {
                 Interval = source.Interval,
                 IsActive = source.IsActive,

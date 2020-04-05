@@ -3,9 +3,9 @@ using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using GTSLogGeneratorApi.Extensions;
+using GTSLogGeneratorApi.Infrastructure.Extensions;
 
-namespace GTSLogGeneratorApi.Jobs
+namespace GTSLogGeneratorApi.Application.Jobs
 {
     public class LogsGenerationJob : ILogsGenerationJob
     {
@@ -15,8 +15,10 @@ namespace GTSLogGeneratorApi.Jobs
 
         public Task Execute(LogsGenerationParameters parameters)
         {
-            var timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+            if(Directory.GetFiles(parameters.Path).Length >= 20)
+                return Task.CompletedTask;
             
+            var timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
             using (StreamWriter file = new StreamWriter($"{parameters.Path}/{timestamp}.log"))
             {
                 for (var i = 1; i <= parameters.LogsCount; i++)

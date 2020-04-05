@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
-namespace GTSLogGeneratorApi.Jobs
+namespace GTSLogGeneratorApi.Application.Jobs
 {
     public class LogsGenerationParameters
     {

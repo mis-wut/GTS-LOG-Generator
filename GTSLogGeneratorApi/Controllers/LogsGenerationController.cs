@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using GTSLogGeneratorApi.Jobs;
-using GTSLogGeneratorApi.Mappers;
-using Hangfire;
+﻿using System.Threading.Tasks;
+using GTSLogGeneratorApi.Application.GetConfigRequest;
+using GTSLogGeneratorApi.Application.GetLogsGenerationParametersRequest;
+using GTSLogGeneratorApi.Application.UpdateConfigRequest;
+using GTSLogGeneratorApi.Application.UpdateLogsGenerationJobRequest;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GTSLogGeneratorApi.Controllers
@@ -13,60 +12,26 @@ namespace GTSLogGeneratorApi.Controllers
     [ApiController]
     public class LogsGenerationController : ControllerBase
     {
-        private readonly IRecurringJobManager _recurringJobManager;
-        private readonly ILogsGenerationJob _logsGenerationJob;
-        private readonly ILogsGenerationParametersMapper _parametersMapper;
-        private readonly ILogsGenerationParametersResponseMapper _jobParametersMapper;
+        private IMediator _mediator;
 
-        public LogsGenerationController(IRecurringJobManager recurringJobManager,
-            ILogsGenerationJob logsGenerationJob,
-            ILogsGenerationParametersMapper parametersMapper,
-            ILogsGenerationParametersResponseMapper jobParametersMapper)
+        public LogsGenerationController(IMediator mediator)
         {
-            _recurringJobManager = recurringJobManager;
-            _logsGenerationJob = logsGenerationJob;
-            _parametersMapper = parametersMapper;
-            _jobParametersMapper = jobParametersMapper;
+            _mediator = mediator;
         }
 
         [HttpPut]
         [Route("UpdateLogGenerationJob")]
-        public ActionResult UpdateLogGenerationJob(UpdateLogsGenerationJobRequest request)
+        public async Task<ActionResult> UpdateLogGenerationJob(UpdateLogsGenerationJobRequest request)
         {
-            var parameters = _parametersMapper.Map(request);
-            LogsGenerationJob.Parameters = parameters;
-
-            if (request.IsActive)
-            {
-                if (parameters.Interval < 60)
-                {
-                    _recurringJobManager.AddOrUpdate(LogsGenerationJob.Id, () => _logsGenerationJob.Execute(parameters),
-                        $"*/{request.Interval} * * * * *");
-                }
-                else if (request.Interval < 3600)
-                {
-                    _recurringJobManager.AddOrUpdate(LogsGenerationJob.Id, () => _logsGenerationJob.Execute(parameters),
-                        $"* */{request.Interval / 60} * * * *");
-                }
-                else
-                {
-                    _recurringJobManager.AddOrUpdate(LogsGenerationJob.Id, () => _logsGenerationJob.Execute(parameters),
-                        $"* * *{request.Interval / 3600} * * *");
-                }
-            }
-            else
-            {
-                _recurringJobManager.RemoveIfExists(LogsGenerationJob.Id);
-            }
-
+            await _mediator.Send(request);
             return Ok();
         }
-
+        
         [HttpGet]
         [Route("GetLogGenerationJobParameters")]
-        public ActionResult<LogsGenerationParametersResponse> GetLogGenerationJobParameters()
+        public async Task<ActionResult<GetLogsGenerationParametersResponse>> GetLogGenerationJobParameters()
         {
-            return _jobParametersMapper.Map(LogsGenerationJob.Parameters);
+            return await _mediator.Send(new GetLogsGenerationParametersRequest());
         }
     }
 }

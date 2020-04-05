@@ -1,6 +1,6 @@
-namespace GTSLogGeneratorApi.Controllers
+namespace GTSLogGeneratorApi.Application.GetLogsGenerationParametersRequest
 {
-    public class LogsGenerationParametersResponse
+    public class GetLogsGenerationParametersResponse
     {
         public bool IsActive { get; set; }
 

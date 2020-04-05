@@ -1,10 +1,9 @@
 ﻿using System;
 using Hangfire;
 using Hangfire.MemoryStorage;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace GTSLogGeneratorApi.Extensions.ServiceCollectionExtensions
+namespace GTSLogGeneratorApi.Infrastructure.Extensions.ServiceCollectionExtensions
 {
     public static class Hangfire
     {

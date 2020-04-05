@@ -1,6 +1,8 @@
-namespace GTSLogGeneratorApi.Controllers
+using MediatR;
+
+namespace GTSLogGeneratorApi.Application.UpdateLogsGenerationJobRequest
 {
-    public class UpdateLogsGenerationJobRequest
+    public class UpdateLogsGenerationJobRequest : IRequest
     {
         public bool IsActive { get; set; }
 
