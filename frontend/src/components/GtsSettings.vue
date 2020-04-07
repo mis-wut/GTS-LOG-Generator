@@ -6,12 +6,14 @@
       <v-form>
         <v-text-field
           v-model="settingsData.configFilePath"
+          :rules="fieldRequired"
           label="Configuration file path:"
           required
         ></v-text-field>
 
         <v-text-field
           v-model="settingsData.logsInputFolder"
+          :rules="fieldRequired"
           label="Logs input folder path:"
           required
         ></v-text-field>
@@ -30,32 +32,46 @@
 
         <v-text-field
           v-model="settingsData.initialTimestampRoundBase"
+          :rules="fieldRequired"
           label="Initial timestamp for rounding:"
+          type="number"
+          style="width: 200px"
           required
         ></v-text-field>
 
         <v-text-field
           v-model="settingsData.timewindowSendCount"
+          :rules="fieldRequired"
           label="Timewindow count to send:"
+          type="number"
+          style="width: 200px"
           required
         ></v-text-field>
 
-        <v-text-field v-model="settingsData.influxdbHost" label="Influxdb host:" required></v-text-field>
+        <v-text-field
+          v-model="settingsData.influxdbHost"
+          :rules="fieldRequired"
+          label="Influxdb host:"
+          required
+        ></v-text-field>
 
         <v-text-field
           v-model="settingsData.influxdbLogsMetricsBucket"
+          :rules="fieldRequired"
           label="Influxdb logs metrics bucket:"
           required
         ></v-text-field>
 
         <v-text-field
           v-model="settingsData.influxdbSystemMetricsBucket"
+          :rules="fieldRequired"
           label="Influxdb system metrics bucket:"
           required
         ></v-text-field>
 
         <v-text-field
           v-model="settingsData.influxdbAuthToken"
+          :rules="fieldRequired"
           label="Influxdb auth token:"
           required
         ></v-text-field>
@@ -82,6 +98,7 @@ export default {
   data: () => ({
     // TODO: change to false, set true after response
     loaded: true,
+    fieldRequired: [v => !!v || "Field is required."],
     settingsData: {
       configFilePath: "",
       logsInputFolder: "",

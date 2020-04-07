@@ -6,7 +6,7 @@
       <v-form v-model="valid">
         <v-checkbox v-model="isActive" label="Active"></v-checkbox>
 
-        <v-text-field v-model="path" :rules="pathRules" label="Logs folder path:" required></v-text-field>
+        <v-text-field v-model="path" :rules="fieldRequired" label="Logs folder path:" required></v-text-field>
 
         <v-subheader class="pl-0">Generation interval (seconds):</v-subheader>
         <v-text-field
@@ -68,7 +68,7 @@ export default {
     loaded: false,
     valid: false,
     isActive: false,
-    pathRules: [v => !!v || "Path is required"],
+    fieldRequired: [v => !!v || "Field is required."],
     path: "",
     channelsCount: 1,
     providersCount: 1,
