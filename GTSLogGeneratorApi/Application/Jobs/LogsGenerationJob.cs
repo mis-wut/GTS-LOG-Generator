@@ -3,6 +3,7 @@ using System.IO;
 using System.Threading.Tasks;
 using GTSLogGeneratorApi.Application.Models;
 using GTSLogGeneratorApi.Infrastructure.Extensions;
+using Hangfire;
 
 namespace GTSLogGeneratorApi.Application.Jobs
 {
@@ -10,6 +11,7 @@ namespace GTSLogGeneratorApi.Application.Jobs
     {
         public static string Id = "LogsGenerationJob";
 
+        [AutomaticRetry(Attempts = 0, OnAttemptsExceeded = AttemptsExceededAction.Delete)]
         public Task Execute(LogsGenerationParameters parameters)
         {
             if(Directory.GetFiles(parameters.Path).Length >= 20)

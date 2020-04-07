@@ -11,8 +11,6 @@ namespace GTSLogGeneratorApi.Application.GetConfigRequest
         public string LoggerOutputFileLocation { get; set; }
 
         public int InitialTimestampRoundBase { get; set; }
-        
-        public int Timewindow { get; set; }
 
         public int TimewindowSendCount { get; set; }
         
@@ -22,6 +20,6 @@ namespace GTSLogGeneratorApi.Application.GetConfigRequest
         
         public string InfluxdbSystemMetricsBucket { get; set; }
         
-        public string InfxludbAuthToken { get; set; }
+        public string InfluxdbAuthToken { get; set; }
     }
 }

@@ -4,13 +4,15 @@ using Autofac.Extensions.DependencyInjection;
 using GTSLogGeneratorApi.Infrastructure.AutofacModules;
 using GTSLogGeneratorApi.Infrastructure.Extensions.ServiceCollectionExtensions;
 using GTSLogGeneratorApi.Infrastructure.Middlewares;
+using GTSLogGeneratorApi.Infrastructure.RequestExamples;
 using Hangfire;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.Filters;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace GTSLogGeneratorApi
 {
@@ -34,8 +36,10 @@ namespace GTSLogGeneratorApi
             }));
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "GTS-Log Generator", Version = "v1" });
+                c.SwaggerDoc("v1", new Info() { Title = "GTS-Log Generator"});
+                c.ExampleFilters();
             });
+            services.AddSwaggerExamplesFromAssemblyOf<UpdateConfigRequestExample>();
             services.AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             

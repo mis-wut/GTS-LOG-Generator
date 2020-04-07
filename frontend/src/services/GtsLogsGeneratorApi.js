@@ -12,7 +12,7 @@ export default {
   getLogGenerationJobParameters() {
     return axios
       .get("LogsGeneration/GetLogGenerationJobParameters")
-      .then(response => {
+      .then((response) => {
         return response.data;
       });
   },
@@ -22,5 +22,15 @@ export default {
       "LogsGeneration/UpdateLogGenerationJob",
       updateLogGenerationJobRequest
     );
-  }
+  },
+
+  getSettings() {
+    return axios.get("Config/GetConfig").then((response) => {
+      return response.data;
+    });
+  },
+
+  updateSettings(updateConfigRequest) {
+    return axios.put("Config/UpdateConfig", updateConfigRequest);
+  },
 };

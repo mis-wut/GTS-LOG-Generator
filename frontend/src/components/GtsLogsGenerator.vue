@@ -77,7 +77,10 @@ export default {
     logsCount: 100,
     hitProbability: 50,
     snackbar: false,
-    snackbarText: "Saved successfully!",
+    snackbarSuccessMessage: "Saved successfully!",
+    snackbarSuccessColor: "success",
+    snackbarErrorColor: "error",
+    snackbarText: "",
     snackbarColor: "success",
     snackbarTimeout: 4000
   }),
@@ -107,9 +110,17 @@ export default {
         channelsCount: this.channelsCount,
         providersCount: this.providersCount,
         path: this.path
-      }).then(() => {
-        this.snackbar = true;
-      });
+      })
+        .then(() => {
+          this.snackbarText = this.snackbarSuccessMessage;
+          this.snackbarColor = this.snackbarSuccessColor;
+          this.snackbar = true;
+        })
+        .catch(error => {
+          this.snackbarText = error.response.data;
+          this.snackbarColor = this.snackbarErrorColor;
+          this.snackbar = true;
+        });
     }
   }
 };

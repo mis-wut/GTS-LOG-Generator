@@ -24,7 +24,6 @@ namespace GTSLogGeneratorApi.Application.UpdateConfigRequest
             _parameters.ErrorLogsFolder = source.ErrorLogsFolder;
             _parameters.LoggerOutputFileLocation = source.LoggerOutputFileLocation;
             _parameters.InitialTimestampRoundBase = source.InitialTimestampRoundBase;
-            _parameters.Timewindow = source.Timewindow;
             _parameters.TimewindowSendCount = source.TimewindowSendCount;
             _parameters.InfluxdbHost = source.InfluxdbHost;
             _parameters.InfluxdbLogsMetricsBucket = source.InfluxdbLogsMetricsBucket;

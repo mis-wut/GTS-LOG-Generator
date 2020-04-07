@@ -21,8 +21,7 @@ namespace GTSLogGeneratorApi.Application.GetConfigRequest
                 InfluxdbHost = source.InfluxdbHost,
                 InfluxdbLogsMetricsBucket = source.InfluxdbLogsMetricsBucket,
                 InfluxdbSystemMetricsBucket = source.InfluxdbSystemMetricsBucket,
-                InfxludbAuthToken = source.InfluxdbAuthToken,
-                Timewindow = source.Timewindow,
+                InfluxdbAuthToken = source.InfluxdbAuthToken,
                 TimewindowSendCount = source.TimewindowSendCount,
                 InitialTimestampRoundBase = source.InitialTimestampRoundBase
             };

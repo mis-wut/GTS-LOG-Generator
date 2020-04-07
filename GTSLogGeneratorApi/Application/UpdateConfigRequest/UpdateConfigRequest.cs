@@ -14,8 +14,6 @@ namespace GTSLogGeneratorApi.Application.UpdateConfigRequest
 
         public int InitialTimestampRoundBase { get; set; }
         
-        public int Timewindow { get; set; }
-
         public int TimewindowSendCount { get; set; }
         
         public string InfluxdbHost { get; set; }
