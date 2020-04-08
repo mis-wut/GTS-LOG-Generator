@@ -8,6 +8,7 @@
           v-model="settingsData.configFilePath"
           :rules="fieldRequired"
           label="Configuration file path:"
+          style="width: 800px"
           required
         ></v-text-field>
 
@@ -15,18 +16,21 @@
           v-model="settingsData.logsInputFolder"
           :rules="fieldRequired"
           label="Logs input folder path:"
+          style="width: 800px"
           required
         ></v-text-field>
 
         <v-text-field
           v-model="settingsData.errorLogsFolder"
           label="Error logs folder path:"
+          style="width: 800px"
           required
         ></v-text-field>
 
         <v-text-field
           v-model="settingsData.loggerOutputFileLocation"
           label="Logger output file location:"
+          style="width: 800px"
           required
         ></v-text-field>
 
@@ -40,9 +44,9 @@
         ></v-text-field>
 
         <v-text-field
-          v-model="settingsData.timewindowSendCount"
+          v-model="settingsData.timewindow"
           :rules="fieldRequired"
-          label="Timewindow count to send:"
+          label="Timewindow (in seconds):"
           type="number"
           style="width: 200px"
           required
@@ -52,6 +56,7 @@
           v-model="settingsData.influxdbHost"
           :rules="fieldRequired"
           label="Influxdb host:"
+          style="width: 800px"
           required
         ></v-text-field>
 
@@ -59,6 +64,7 @@
           v-model="settingsData.influxdbLogsMetricsBucket"
           :rules="fieldRequired"
           label="Influxdb logs metrics bucket:"
+          style="width: 800px"
           required
         ></v-text-field>
 
@@ -66,6 +72,7 @@
           v-model="settingsData.influxdbSystemMetricsBucket"
           :rules="fieldRequired"
           label="Influxdb system metrics bucket:"
+          style="width: 800px"
           required
         ></v-text-field>
 
@@ -73,6 +80,7 @@
           v-model="settingsData.influxdbAuthToken"
           :rules="fieldRequired"
           label="Influxdb auth token:"
+          style="width: 800px"
           required
         ></v-text-field>
       </v-form>
@@ -105,7 +113,7 @@ export default {
       errorLogsFolder: "",
       loggerOutputFileLocation: "",
       initialTimestampRoundBase: 0,
-      timewindowSendCount: 1,
+      timewindow: 10,
       influxdbHost: "",
       influxdbLogsMetricsBucket: "",
       influxdbSystemMetricsBucket: "",

@@ -12,7 +12,7 @@ namespace GTSLogGeneratorApi.Infrastructure.RequestExamples
                 ConfigFilePath = "/home/krystian/Documents/Magisterka/GtsFolders/config.ini",
                 ErrorLogsFolder = "/home/krystian/Documents/Magisterka/GtsFolders/errors_logs",
                 LogsInputFolder = "/home/krystian/Documents/Magisterka/GtsFolders/logs_data",
-                TimewindowSendCount = 3,
+                Timewindow = 10,
                 InfluxdbHost = "localhost:9999",
                 InfluxdbAuthToken = "auth_token",
                 InfluxdbLogsMetricsBucket = "gts_logs_metrics",

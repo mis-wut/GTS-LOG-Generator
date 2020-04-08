@@ -6,7 +6,13 @@
       <v-form v-model="valid">
         <v-checkbox v-model="isActive" label="Active"></v-checkbox>
 
-        <v-text-field v-model="path" :rules="fieldRequired" label="Logs folder path:" required></v-text-field>
+        <v-text-field
+          v-model="path"
+          :rules="fieldRequired"
+          style="width: 800px"
+          label="Logs folder path:"
+          required
+        ></v-text-field>
 
         <v-subheader class="pl-0">Generation interval (seconds):</v-subheader>
         <v-text-field

@@ -2,7 +2,7 @@ import axios from "axios";
 
 export default {
   getTerminalUrl() {
-    return `http://${process.env.VUE_APP_HOST}:2222/ssh/host/gpunode3`;
+    return `http://${process.env.VUE_APP_HOST}:2222/`;
   },
 
   getInfluxDbUrl() {
