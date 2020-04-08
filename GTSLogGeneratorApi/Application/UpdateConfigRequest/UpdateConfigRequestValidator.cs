@@ -15,7 +15,8 @@ namespace GTSLogGeneratorApi.Application.UpdateConfigRequest
                 .DirectoryExists();
 
             RuleFor(x => x.ErrorLogsFolder)
-                .DirectoryExists();
+                .DirectoryExists()
+                .Unless(x => string.IsNullOrEmpty(x.ErrorLogsFolder));
         }
     }
 }
