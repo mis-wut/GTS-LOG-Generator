@@ -43,7 +43,7 @@ namespace GTSLogGeneratorApi.Application.UpdateLogsGenerationJobRequest
             _parameters.LogsCount = source.LogsCount;
             _parameters.Path = path;
 
-            return _parameters;
+            return _parameters.Clone();
         }
     }
 }

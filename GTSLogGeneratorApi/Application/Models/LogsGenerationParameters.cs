@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace GTSLogGeneratorApi.Application.Models
 {
@@ -17,5 +18,19 @@ namespace GTSLogGeneratorApi.Application.Models
         public List<string> Channels { get; set; }
 
         public List<string> Providers { get; set; }
+
+        public LogsGenerationParameters Clone()
+        {
+            return new LogsGenerationParameters()
+            {
+                IsActive = IsActive,
+                Channels = Channels.ToList(),
+                Cities = Cities.ToList(),
+                Interval = Interval,
+                Path = Path,
+                Providers = Providers.ToList(),
+                LogsCount = LogsCount
+            };
+        }
     }
 }

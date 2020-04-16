@@ -15,7 +15,7 @@ namespace GTSLogGeneratorApi.Infrastructure.Extensions.ServiceCollectionExtensio
                 .UseRecommendedSerializerSettings()
                 .UseMemoryStorage());
 
-            services.AddHangfireServer(x => x.SchedulePollingInterval = TimeSpan.FromSeconds(1));
+            services.AddHangfireServer(x => x.SchedulePollingInterval = TimeSpan.FromMilliseconds(200));
             
             return services;
         }

@@ -2,6 +2,7 @@ using GTSLogGeneratorApi.Application.Jobs;
 using GTSLogGeneratorApi.Application.Models;
 using Hangfire;
 using MediatR;
+using Microsoft.Extensions.Logging;
 
 namespace GTSLogGeneratorApi.Application.UpdateLogsGenerationJobRequest
 {
@@ -10,7 +11,7 @@ namespace GTSLogGeneratorApi.Application.UpdateLogsGenerationJobRequest
         private readonly IRecurringJobManager _recurringJobManager;
         private readonly ILogsGenerationJob _logsGenerationJob;
         private readonly ILogsGenerationJobParametersUpdater _parametersUpdater;
-        
+
         public UpdateLogsGenerationJobRequestHandler(IRecurringJobManager recurringJobManager, 
             ILogsGenerationJob logsGenerationJob,
             ILogsGenerationJobParametersUpdater parametersUpdater)
