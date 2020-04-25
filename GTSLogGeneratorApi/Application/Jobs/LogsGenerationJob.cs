@@ -15,20 +15,39 @@ namespace GTSLogGeneratorApi.Application.Jobs
         [AutomaticRetry(Attempts = 0, OnAttemptsExceeded = AttemptsExceededAction.Delete)]
         public void Execute(LogsGenerationParameters parameters)
         {
-            if(Directory.GetFiles(parameters.Path).Length >= 20)
-                return;
-            
-            var timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-            using (StreamWriter file = new StreamWriter($"{parameters.Path}/{timestamp}.log"))
+            try
             {
-                for (var i = 1; i <= parameters.LogsCount; i++)
+
+                var timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+
+                if (File.Exists($"tmp_{timestamp}.log") ||
+                    !Directory.Exists(parameters.Path) ||
+                    Directory.GetFiles(parameters.Path).Length >= 20)
+                    return;
+
+                using (StreamWriter file = new StreamWriter($"tmp_{timestamp}.log"))
                 {
-                    var channel = parameters.Channels.GetRandomElement();
-                    var city = parameters.Cities.GetRandomElement();
-                    var provider = parameters.Providers.GetRandomElement();
-                    
-                    file.WriteLine($"\"2020-02-10T17:15:58+02:00\"\"90.84.143.49\"\"nginx:\"\"{city}\"\"-\"\"[10/Feb/2020:17:15:58 +0000]\"\"GET\"\"http://test.com/myvideo/download/{channel}/{provider}//\"\"HTTP/1.1\"\"200\"\"1000\"\"AffxVbxfwindowsxdCAECv\"\"{timestamp}\"");
+                    for (var i = 1; i <= parameters.LogsCount; i++)
+                    {
+                        var channel = parameters.Channels.GetRandomElement();
+                        var city = parameters.Cities.GetRandomElement();
+                        var provider = parameters.Providers.GetRandomElement();
+
+                        file.WriteLine(
+                            $"\"2020-02-10T17:15:58+02:00\"\"90.84.143.49\"\"nginx:\"\"{city}\"\"-\"\"[10/Feb/2020:17:15:58 +0000]\"\"GET\"\"http://test.com/myvideo/download/{channel}/{provider}//\"\"HTTP/1.1\"\"200\"\"1000\"\"AffxVbxfwindowsxdCAECv\"\"{timestamp}\"");
+                    }
+
                 }
+
+                var targetPath = Path.Combine(parameters.Path, $"{timestamp}.log");
+                if (!File.Exists(targetPath))
+                {
+                    File.Move($"tmp_{timestamp}.log", Path.Combine(parameters.Path, $"{timestamp}.log"));
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[LogsGenerationJob]: {ex.Message}");
             }
         }
     }
