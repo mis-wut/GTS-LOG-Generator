@@ -15,10 +15,10 @@ namespace GTSLogGeneratorApi.Application.Jobs
         [AutomaticRetry(Attempts = 0, OnAttemptsExceeded = AttemptsExceededAction.Delete)]
         public void Execute(LogsGenerationParameters parameters)
         {
+            var timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+
             try
             {
-
-                var timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
 
                 if (File.Exists($"tmp_{timestamp}.log") ||
                     !Directory.Exists(parameters.Path) ||
@@ -44,10 +44,23 @@ namespace GTSLogGeneratorApi.Application.Jobs
                 {
                     File.Move($"tmp_{timestamp}.log", Path.Combine(parameters.Path, $"{timestamp}.log"));
                 }
+                else
+                {
+                    Clean(timestamp);
+                }
             }
             catch (Exception ex)
             {
+                Clean(timestamp);
                 Console.WriteLine($"[LogsGenerationJob]: {ex.Message}");
+            }
+        }
+
+        private static void Clean(long timestamp)
+        {
+            if (File.Exists($"tmp_{timestamp}.log"))
+            {
+                File.Delete($"tmp_{timestamp}.log");
             }
         }
     }
