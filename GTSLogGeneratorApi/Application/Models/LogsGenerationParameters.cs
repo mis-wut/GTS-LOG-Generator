@@ -13,11 +13,11 @@ namespace GTSLogGeneratorApi.Application.Models
 
         public int LogsCount { get; set; }
 
-        public List<string> Cities { get; set; }
+        public List<string> Cities { get; set; } = new List<string>();
         
-        public List<string> Channels { get; set; }
+        public List<string> Channels { get; set; } = new List<string>();
 
-        public List<string> Providers { get; set; }
+        public List<string> Providers { get; set; } = new List<string>();
 
         public LogsGenerationParameters Clone()
         {

@@ -14,7 +14,7 @@ namespace GTSLogGeneratorApi.Application.Jobs
     {
         public static string Id = "LogsGenerationJob";
 
-        public static LogsGenerationParameters Parameters = null;
+        public static LogsGenerationParameters Parameters = new LogsGenerationParameters();
         
         public async Task Execute()
         {

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using GTSLogGeneratorApi.Application.Jobs;
@@ -28,7 +29,7 @@ namespace GTSLogGeneratorApi
 
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            services.AddMemoryHangfire();
+            //services.AddMemoryHangfire();
             services.AddCors(options => options.AddPolicy("ApiCorsPolicy", builder =>
             {
                 builder.AllowAnyOrigin()
@@ -56,7 +57,7 @@ namespace GTSLogGeneratorApi
           
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILogsGenerationJob job)
         {
-            app.UseHangfireDashboard();
+            //app.UseHangfireDashboard();
             app.UseMiddleware<ErrorHandlingMiddleware>();
             app.UseCors("ApiCorsPolicy");
             app.UseSwagger();
@@ -64,8 +65,8 @@ namespace GTSLogGeneratorApi
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "GTS-Log Generator");
             });
-            
-            LogsGenerationJob.Id = BackgroundJob.Enqueue(() => job.Execute());
+
+            Task.Run(job.Execute);
             app.UseMvc();
         }
     }
