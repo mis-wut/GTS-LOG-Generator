@@ -1,6 +1,7 @@
 ﻿using System;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using GTSLogGeneratorApi.Application.Jobs;
 using GTSLogGeneratorApi.Infrastructure.AutofacModules;
 using GTSLogGeneratorApi.Infrastructure.Extensions.ServiceCollectionExtensions;
 using GTSLogGeneratorApi.Infrastructure.Middlewares;
@@ -53,7 +54,7 @@ namespace GTSLogGeneratorApi
             return new AutofacServiceProvider(container);
         }
           
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILogsGenerationJob job)
         {
             app.UseHangfireDashboard();
             app.UseMiddleware<ErrorHandlingMiddleware>();
@@ -63,7 +64,8 @@ namespace GTSLogGeneratorApi
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "GTS-Log Generator");
             });
-
+            
+            LogsGenerationJob.Id = BackgroundJob.Enqueue(() => job.Execute());
             app.UseMvc();
         }
     }

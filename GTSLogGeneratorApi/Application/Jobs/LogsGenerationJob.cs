@@ -14,27 +14,28 @@ namespace GTSLogGeneratorApi.Application.Jobs
     {
         public static string Id = "LogsGenerationJob";
 
-        [AutomaticRetry(Attempts = 0, OnAttemptsExceeded = AttemptsExceededAction.Delete)]
-        public async Task Execute(LogsGenerationParameters parameters, CancellationToken token)
+        public static LogsGenerationParameters Parameters = null;
+        
+        public async Task Execute()
         {
-            var timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-
             while (true)
             {
                 try
                 {
-                    if (token.IsCancellationRequested)
-                        return;
-
-                    if (!Directory.Exists(parameters.Path) ||
-                        Directory.GetFiles(parameters.Path).Length >= 20)
+                    if (Parameters == null ||
+                        !Parameters.IsActive ||
+                        !Directory.Exists(Parameters.Path) ||
+                        Directory.GetFiles(Parameters.Path).Length >= 20)
                     {
                         await Task.Delay(TimeSpan.FromMilliseconds(200));
                         continue;
                     }
 
-                    var startGeneration = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+                    var parameters = Parameters.Clone();
                     
+                    var startGeneration = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+
+                    var timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
                     using (StreamWriter file = new StreamWriter($"tmp_{timestamp}.log"))
                     {
                         for (var i = 1; i <= parameters.LogsCount; i++)
@@ -56,7 +57,6 @@ namespace GTSLogGeneratorApi.Application.Jobs
                     {
                         await Task.Delay(TimeSpan.FromMilliseconds(differenceMs));
                     }
-                    timestamp += parameters.Interval;
                 }
                 catch (Exception ex)
                 {
@@ -68,6 +68,6 @@ namespace GTSLogGeneratorApi.Application.Jobs
 
     public interface ILogsGenerationJob
     {
-        Task Execute(LogsGenerationParameters parameters, CancellationToken token);
+        Task Execute();
     }
 }

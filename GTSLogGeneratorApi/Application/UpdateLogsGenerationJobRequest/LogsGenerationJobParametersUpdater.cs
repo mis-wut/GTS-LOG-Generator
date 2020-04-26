@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using GTSLogGeneratorApi.Application.Jobs;
 using GTSLogGeneratorApi.Application.Models;
 using GTSLogGeneratorApi.Infrastructure.Extensions;
 
@@ -6,13 +7,11 @@ namespace GTSLogGeneratorApi.Application.UpdateLogsGenerationJobRequest
 {
     public interface ILogsGenerationJobParametersUpdater
     {
-        LogsGenerationParameters Update(UpdateLogsGenerationJobRequest source);
+        void Update(UpdateLogsGenerationJobRequest source);
     }
     
     public class LogsGenerationJobParametersUpdater : ILogsGenerationJobParametersUpdater
     {
-        private readonly LogsGenerationParameters _parameters;
-
         private readonly List<string> _channels = new List<string>
         {
             "besoin", "laxative", "gnattier", "tensionless",
@@ -27,23 +26,19 @@ namespace GTSLogGeneratorApi.Application.UpdateLogsGenerationJobRequest
             "157.51.237.177", "47.49.132.112", "185.131.54.102", "188.26.89.128", "77.152.184.200"
         };
 
-        public LogsGenerationJobParametersUpdater(LogsGenerationParameters parameters)
-        {
-            _parameters = parameters;
-        }
-
-        public LogsGenerationParameters Update(UpdateLogsGenerationJobRequest source)
+        public void Update(UpdateLogsGenerationJobRequest source)
         {
             var path = source.Path.EndsWith("/") ? source.Path : $"{source.Path}/";
-            _parameters.IsActive = source.IsActive;
-            _parameters.Interval = source.Interval;
-            _parameters.Channels = _channels.GetRandom(source.ChannelsCount);
-            _parameters.Providers = _providers.GetRandom(source.ProvidersCount);
-            _parameters.Cities = _cityIps.GetRandom(source.CitiesCount);
-            _parameters.LogsCount = source.LogsCount;
-            _parameters.Path = path;
+            var parameters = new LogsGenerationParameters(); 
+            parameters.IsActive = source.IsActive;
+            parameters.Interval = source.Interval;
+            parameters.Channels = _channels.GetRandom(source.ChannelsCount);
+            parameters.Providers = _providers.GetRandom(source.ProvidersCount);
+            parameters.Cities = _cityIps.GetRandom(source.CitiesCount);
+            parameters.LogsCount = source.LogsCount;
+            parameters.Path = path;
 
-            return _parameters.Clone();
+            LogsGenerationJob.Parameters = parameters.Clone();
         }
     }
 }

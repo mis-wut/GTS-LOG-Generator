@@ -11,7 +11,6 @@ namespace GTSLogGeneratorApi.Infrastructure.AutofacModules
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterType<LogsGenerationJob>().As<ILogsGenerationJob>();
-            builder.RegisterInstance(new LogsGenerationParameters());
             builder.RegisterType<LogsGenerationJobParametersUpdater>().As<ILogsGenerationJobParametersUpdater>();
             builder.RegisterInstance(new ConfigParameters());
             builder.RegisterType<ConfigParametersUpdater>().As<IConfigParametersUpdater>();

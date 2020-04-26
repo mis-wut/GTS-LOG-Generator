@@ -21,13 +21,7 @@ namespace GTSLogGeneratorApi.Application.UpdateLogsGenerationJobRequest
 
         protected override void Handle(UpdateLogsGenerationJobRequest request)
         {
-            var parameters = _parametersUpdater.Update(request);
-
-            BackgroundJob.Delete(LogsGenerationJob.Id);
-            if (request.IsActive)
-            {
-                LogsGenerationJob.Id = BackgroundJob.Enqueue(() => _logsGenerationJob.Execute(parameters, CancellationToken.None));
-            }
+            _parametersUpdater.Update(request);
         }
     }
 }
