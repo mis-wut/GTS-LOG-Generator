@@ -17,6 +17,7 @@ namespace GTSLogGeneratorApi.Application.Jobs
         [AutomaticRetry(Attempts = 0, OnAttemptsExceeded = AttemptsExceededAction.Delete)]
         public async Task Execute(LogsGenerationParameters parameters, CancellationToken token)
         {
+            var timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
 
             while (true)
             {
@@ -24,37 +25,38 @@ namespace GTSLogGeneratorApi.Application.Jobs
                 {
                     if (token.IsCancellationRequested)
                         return;
-                    
+
                     if (!Directory.Exists(parameters.Path) ||
                         Directory.GetFiles(parameters.Path).Length >= 20)
-                        return;
-                    
-                    var timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-                    var utcNow = DateTimeOffset.UtcNow;
-                    var startGeneration = utcNow.ToUnixTimeMilliseconds();
-                    
-                    var content = new StringBuilder();
-                    for (var i = 1; i <= parameters.LogsCount; i++)
                     {
-                        var channel = parameters.Channels.GetRandomElement();
-                        var city = parameters.Cities.GetRandomElement();
-                        var provider = parameters.Providers.GetRandomElement();
-
-                        content.AppendLine(
-                            $"\"2020-02-10T17:15:58+02:00\"\"90.84.143.49\"\"nginx:\"\"{city}\"\"-\"\"[10/Feb/2020:17:15:58 +0000]\"\"GET\"\"http://test.com/myvideo/download/{channel}/{provider}//\"\"HTTP/1.1\"\"200\"\"1000\"\"AffxVbxfwindowsxdCAECv\"\"{timestamp}\"");
+                        await Task.Delay(TimeSpan.FromMilliseconds(200));
+                        continue;
                     }
 
-                    var targetPath = Path.Combine(parameters.Path, $"{timestamp}.log");
-                    if (!File.Exists(targetPath))
+                    var startGeneration = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+                    
+                    using (StreamWriter file = new StreamWriter($"tmp_{timestamp}.log"))
                     {
-                        File.WriteAllText(Path.Combine(parameters.Path, $"{timestamp}.log"), content.ToString());
+                        for (var i = 1; i <= parameters.LogsCount; i++)
+                        {
+                            var channel = parameters.Channels.GetRandomElement();
+                            var city = parameters.Cities.GetRandomElement();
+                            var provider = parameters.Providers.GetRandomElement();
+
+                            file.WriteLine(
+                                $"\"2020-02-10T17:15:58+02:00\"\"90.84.143.49\"\"nginx:\"\"{city}\"\"-\"\"[10/Feb/2020:17:15:58 +0000]\"\"GET\"\"http://test.com/myvideo/download/{channel}/{provider}//\"\"HTTP/1.1\"\"200\"\"1000\"\"AffxVbxfwindowsxdCAECv\"\"{timestamp}\"");
+                        }
+
                     }
-                    var endGeneration = utcNow.AddSeconds(parameters.Interval).ToUnixTimeMilliseconds();
-                    var differenceMs = endGeneration - startGeneration;
+                    File.Move($"tmp_{timestamp}.log", Path.Combine(parameters.Path, $"{timestamp}.log"));
+
+                    var endGeneration = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+                    var differenceMs = parameters.Interval * 1000 - (endGeneration - startGeneration);
                     if (differenceMs > 0)
                     {
                         await Task.Delay(TimeSpan.FromMilliseconds(differenceMs));
                     }
+                    timestamp += parameters.Interval;
                 }
                 catch (Exception ex)
                 {
