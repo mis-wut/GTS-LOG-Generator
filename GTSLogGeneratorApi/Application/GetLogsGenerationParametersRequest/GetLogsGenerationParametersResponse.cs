@@ -8,12 +8,16 @@ namespace GTSLogGeneratorApi.Application.GetLogsGenerationParametersRequest
 
         public int LogsCount { get; set; }
 
-        public int CitiesCount { get; set; }
+        public int ServerAddressesCount { get; set; }
         
-        public int ChannelsCount { get; set; }
+        public int HostnamesCount { get; set; }
 
         public int ProvidersCount { get; set; }
-        
+
+        public int UpstreamFqdnsCount { get; set; }
+
+        public int HttpCodesCount { get; set; }
+
         public string Path { get; set; }
     }
 }

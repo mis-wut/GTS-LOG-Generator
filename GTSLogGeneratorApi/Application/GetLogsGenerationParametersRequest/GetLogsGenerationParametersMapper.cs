@@ -17,8 +17,10 @@ namespace GTSLogGeneratorApi.Application.GetLogsGenerationParametersRequest
                 Interval = source.Interval,
                 IsActive = source.IsActive,
                 Path = source.Path,
-                ChannelsCount = source.Channels.Count,
-                CitiesCount = source.Cities.Count,
+                HostnamesCount = source.Hostnames.Count,
+                ServerAddressesCount = source.ServerAddresses.Count,
+                UpstreamFqdnsCount = source.UpstreamFqdns.Count,
+                HttpCodesCount = source.HttpCodes.Count,
                 LogsCount = source.LogsCount,
                 ProvidersCount = source.Providers.Count
             };

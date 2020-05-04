@@ -38,19 +38,20 @@
           </template>
         </v-slider>
 
-        <v-subheader class="pl-0">Hit probability:</v-subheader>
-        <v-slider v-model="hitProbability" :thumb-size="36" thumb-label="always" min="0" max="100">
-          <span slot="thumb-label" slot-scope="{ value }">{{ value }} %</span>
-        </v-slider>
-
-        <v-subheader class="pl-0">Number of channels:</v-subheader>
-        <v-slider v-model="channelsCount" :thumb-size="24" thumb-label="always" min="1" max="10"></v-slider>
-
-        <v-subheader class="pl-0">Number of cities:</v-subheader>
-        <v-slider v-model="citiesCount" :thumb-size="24" thumb-label="always" min="1" max="10"></v-slider>
-
         <v-subheader class="pl-0">Number of providers:</v-subheader>
         <v-slider v-model="providersCount" :thumb-size="24" thumb-label="always" min="1" max="5"></v-slider>
+
+        <v-subheader class="pl-0">Number of server addresses:</v-subheader>
+        <v-slider v-model="serverAddressesCount" :thumb-size="24" thumb-label="always" min="1" max="5"></v-slider>
+
+        <v-subheader class="pl-0">Number of hostnames:</v-subheader>
+        <v-slider v-model="hostnamesCount" :thumb-size="24" thumb-label="always" min="1" max="5"></v-slider>
+
+        <v-subheader class="pl-0">Number of upstream fqdn:</v-subheader>
+        <v-slider v-model="upstreamFqdnsCount" :thumb-size="24" thumb-label="always" min="1" max="5"></v-slider>
+
+        <v-subheader class="pl-0">Number of http codes:</v-subheader>
+        <v-slider v-model="httpCodesCount" :thumb-size="24" thumb-label="always" min="1" max="5"></v-slider>
       </v-form>
     </v-card-text>
 
@@ -76,9 +77,11 @@ export default {
     isActive: false,
     fieldRequired: [v => !!v || "Field is required."],
     path: "",
-    channelsCount: 1,
     providersCount: 1,
-    citiesCount: 1,
+    serverAddressesCount: 1,
+    upstreamFqdnsCount: 1,
+    hostnamesCount: 1,
+    httpCodesCount: 1,
     interval: 5,
     logsCount: 100,
     hitProbability: 50,
@@ -94,13 +97,13 @@ export default {
     GtsLogsGeneratorApi.getLogGenerationJobParameters().then(response => {
       if (response) {
         this.isActive = response.isActive;
-        this.channelsCount = response.channelsCount;
         this.providersCount = response.providersCount;
-        this.citiesCount = response.citiesCount;
+        this.serverAddressesCount = response.serverAddressesCount;
+        this.upstreamFqdnsCount = response.upstreamFqdnsCount;
+        this.hostnamesCount = response.hostnamesCount;
+        this.httpCodesCount = response.httpCodesCount;
         this.interval = response.interval;
         this.logsCount = response.logsCount;
-        // TODO: update hit probability with response probability
-        this.hitProbability = 50;
         this.path = response.path;
       }
       this.loaded = true;
@@ -112,9 +115,11 @@ export default {
         isActive: this.isActive,
         interval: this.interval,
         logsCount: this.logsCount,
-        citiesCount: this.citiesCount,
-        channelsCount: this.channelsCount,
         providersCount: this.providersCount,
+        serverAddressesCount: this.serverAddressesCount,
+        upstreamFqdnsCount: this.upstreamFqdnsCount,
+        hostnamesCount: this.hostnamesCount,
+        httpCodesCount: this.httpCodesCount,
         path: this.path
       })
         .then(() => {

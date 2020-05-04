@@ -10,13 +10,15 @@ namespace GTSLogGeneratorApi.Infrastructure.RequestExamples
         {
             return new UpdateLogsGenerationJobRequest()
             {
-                Path = "/home/krystian/Documents/Magisterka/GtsFolders/logs_data",
+                Path = @"D:\Projects\Logs_data",
                 Interval = 3,
-                ChannelsCount = 2,
-                CitiesCount = 2,
-                IsActive = false,
-                LogsCount = 1000,
-                ProvidersCount = 2
+                HostnamesCount = 2,
+                ServerAddressesCount = 2,
+                ProvidersCount = 2,
+                UpstreamFqdnsCount = 2,
+                HttpCodesCount = 2,
+                IsActive = true,
+                LogsCount = 1000
             };
         }
     }

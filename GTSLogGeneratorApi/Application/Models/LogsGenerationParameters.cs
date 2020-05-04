@@ -13,19 +13,25 @@ namespace GTSLogGeneratorApi.Application.Models
 
         public int LogsCount { get; set; }
 
-        public List<string> Cities { get; set; } = new List<string>();
-        
-        public List<string> Channels { get; set; } = new List<string>();
+        public List<string> ServerAddresses { get; set; } = new List<string>();
+
+        public List<string> UpstreamFqdns { get; set; } = new List<string>();
+
+        public List<string> Hostnames { get; set; } = new List<string>();
 
         public List<string> Providers { get; set; } = new List<string>();
+
+        public List<string> HttpCodes { get; set; } = new List<string>();
 
         public LogsGenerationParameters Clone()
         {
             return new LogsGenerationParameters()
             {
                 IsActive = IsActive,
-                Channels = Channels.ToList(),
-                Cities = Cities.ToList(),
+                Hostnames = Hostnames.ToList(),
+                ServerAddresses = ServerAddresses.ToList(),
+                UpstreamFqdns = UpstreamFqdns.ToList(),
+                HttpCodes = HttpCodes.ToList(),
                 Interval = Interval,
                 Path = Path,
                 Providers = Providers.ToList(),

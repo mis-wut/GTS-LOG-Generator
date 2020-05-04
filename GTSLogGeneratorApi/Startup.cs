@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Swashbuckle.AspNetCore.Filters;
 using Swashbuckle.AspNetCore.Swagger;
 
@@ -44,7 +45,7 @@ namespace GTSLogGeneratorApi
             services.AddSwaggerExamplesFromAssemblyOf<UpdateConfigRequestExample>();
             services.AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-            
+
             // Autofac
             var containerBuilder = new ContainerBuilder();
             containerBuilder.RegisterModule<MediatorModule>();
