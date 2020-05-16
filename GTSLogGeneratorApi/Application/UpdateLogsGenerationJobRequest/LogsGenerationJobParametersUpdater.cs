@@ -56,7 +56,7 @@ namespace GTSLogGeneratorApi.Application.UpdateLogsGenerationJobRequest
             "/otvppd/OTF/token/timestamp/HH_ID/TERM_ID/14204/pool01/bpk-tv/14204/DASH/dash/canalfilm-video=5123651.dash?bpk-service=LIVE&dt=0",
             "/otvppd/OTF/token/timestamp/HH_ID/TERM_ID/14204/pool01/bpk-tv/14204/DASH/dash/canalfilm-audio_198800_pol=196800-74556566571857.dash?bpk-service=LIVE&dt=0",
             "/otvppd/OTF/token/timestamp/HH_ID/TERM_ID/14204/pool01/bpk-tv/14204/DASH/dash/canalfilm-video=2395600-931957082148.dash?bpk-service=LIVE&dt=0",
-            "/otvppd/OTF/token/timestamp/HH_ID/TERM_ID/14204/pool01/bpk-tv/14204/DASH/index.mpd?bpk-service=LIVE&dt=0",
+            "/otvppd/OTF/token/timestamp/HH_ID/TERM_ID/14204/pool01/bpk-tv/14204/DASH/index.mpd?bpk-service2=LIVE&dt=0",
             "/otvppd/OTF/token/timestamp/HH_ID/TERM_ID/14204/pool01/bpk-tv/14204/DASH/dash/canalfilm-audio_198800_pol=196800-74556566668113.dash?bpk-service=LIVE&dt=0",
             "/otvppd/OTF/token/timestamp/HH_ID/TERM_ID/14204/pool01/bpk-tv/14204/DASH/dash/canalfilm-video=2395600-931957083348.dash?bpk-service=LIVE&dt=0"
         };
