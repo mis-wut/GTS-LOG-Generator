@@ -1,4 +1,7 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Security.Policy;
 using GTSLogGeneratorApi.Application.Jobs;
 using GTSLogGeneratorApi.Application.Models;
 using GTSLogGeneratorApi.Infrastructure.Extensions;
@@ -12,27 +15,53 @@ namespace GTSLogGeneratorApi.Application.UpdateLogsGenerationJobRequest
     
     public class LogsGenerationJobParametersUpdater : ILogsGenerationJobParametersUpdater
     {
-        private readonly List<string> _hostnames = new List<string>
+        private static readonly HashSet<string> _hostnames = new HashSet<string>
         {
-            "besoin", "laxative", "gnattier", "tensionless", "annotate"
+            "besoin", "laxative", "gnattier", "tensionless", "annotate", "any", "tail", "keyboard", "ordinary", "hostname",
+            "cupoftea", "bottle", "hgawqet", "masfhqwe", "makeq", "mogqhweu", "qwertyq", "loktpeta", "asdwqe", "zmawuehq"
         };
 
-        private readonly List<string> _providers = new List<string> {"dsaas", "abcds", "agagr", "gagdd", "reraa"};
-
-        private readonly List<string> _serverAddresses = new List<string>
+        private static readonly HashSet<string> _providers = new HashSet<string>
         {
-            "1.0.106.214", "50.84.238.156", "170.245.98.1", "45.137.219.51", "98.139.252.202"
+            "dsaas", "abcds", "agagr", "gagdd", "reraa",
+            "efgh", "jkloap", "mkrto", "azamqw", "xasdg"
         };
 
-        private readonly List<string> _upstreamFqdns = new List<string>
+        private static readonly HashSet<string> _serverAddresses = GetRandomIpAddresses(120);
+
+        private static readonly HashSet<string> _upstreamFqdns = GetRandomIpAddresses(20);
+        
+        private static readonly HashSet<string> _communties = GetRandomIpAddresses(20);
+
+        private static readonly HashSet<string> _httpCodes = new HashSet<string>
         {
-            "157.51.237.177", "47.49.132.112", "185.131.54.102", "188.26.89.128", "77.152.184.200"
+            "200", "201", "202", "203", "204", "300", "301", "302", "303", "304",
+            "400", "401", "404", "405", "407", "500"
         };
 
-        private readonly List<string> _httpCodes = new List<string>
+        private static readonly HashSet<string> _userAgents = new HashSet<string>()
         {
-            "200", "204", "300", "404", "500"
+            "Mozilla 1.0", "Mozilla 2.0", "Mozilla 3.0", "VO Player", 
+            "Opera 1.0", "Opera 2.0", "Opera 3.0", "Safari 1.0", "Safari 2.0", "Android", "iOS", 
+            "IE 4", "IE 5", "MS Edge", "Chromium 1.0", "Chromium 2.0", "Chromium 3.0",
+            "Chrome 1.0", "Chrome 2.0", "Chrome 3.0"
         };
+
+        private static readonly HashSet<string> _requestUris = new HashSet<string>()
+        {
+            "/otvppd/OTF/token/timestamp/HH_ID/TERM_ID/14204/pool01/bpk-tv/14204/DASH/dash/canalfilm-audio_198800_pol=196800-74556566476625.dash?bpk-service=LIVE&dt=0",
+            "/otvppd/OTF/token/timestamp/HH_ID/TERM_ID/14204/pool01/bpk-tv/14204/DASH/index.mpd?bpk-service=LIVE&dt=0",
+            "/otvppd/OTF/token/timestamp/HH_ID/TERM_ID/14204/pool01/bpk-tv/14204/DASH/dash/canalfilm-video=2395600.dash?bpk-service=LIVE&dt=0",
+            "/otvppd/OTF/token/timestamp/HH_ID/TERM_ID/14204/pool01/bpk-tv/14204/DASH/dash/canalfilm-audio=6233116.dash?bpk-service=LIVE&dt=0",
+            "/otvppd/OTF/token/timestamp/HH_ID/TERM_ID/14204/pool01/bpk-tv/14204/DASH/dash/canalfilm-video=5123651.dash?bpk-service=LIVE&dt=0",
+            "/otvppd/OTF/token/timestamp/HH_ID/TERM_ID/14204/pool01/bpk-tv/14204/DASH/dash/canalfilm-audio_198800_pol=196800-74556566571857.dash?bpk-service=LIVE&dt=0",
+            "/otvppd/OTF/token/timestamp/HH_ID/TERM_ID/14204/pool01/bpk-tv/14204/DASH/dash/canalfilm-video=2395600-931957082148.dash?bpk-service=LIVE&dt=0",
+            "/otvppd/OTF/token/timestamp/HH_ID/TERM_ID/14204/pool01/bpk-tv/14204/DASH/index.mpd?bpk-service=LIVE&dt=0",
+            "/otvppd/OTF/token/timestamp/HH_ID/TERM_ID/14204/pool01/bpk-tv/14204/DASH/dash/canalfilm-audio_198800_pol=196800-74556566668113.dash?bpk-service=LIVE&dt=0",
+            "/otvppd/OTF/token/timestamp/HH_ID/TERM_ID/14204/pool01/bpk-tv/14204/DASH/dash/canalfilm-video=2395600-931957083348.dash?bpk-service=LIVE&dt=0"
+        };
+
+
 
         public void Update(UpdateLogsGenerationJobRequest source)
         {
@@ -40,15 +69,36 @@ namespace GTSLogGeneratorApi.Application.UpdateLogsGenerationJobRequest
             var parameters = new LogsGenerationParameters(); 
             parameters.IsActive = source.IsActive;
             parameters.Interval = source.Interval;
-            parameters.Providers = _providers.GetRandom(source.ProvidersCount);
-            parameters.ServerAddresses = _serverAddresses.GetRandom(source.ServerAddressesCount);
-            parameters.Hostnames = _hostnames.GetRandom(source.HostnamesCount);
-            parameters.UpstreamFqdns = _upstreamFqdns.GetRandom(source.UpstreamFqdnsCount);
-            parameters.HttpCodes = _httpCodes.GetRandom(source.HttpCodesCount);
+            parameters.Providers = _providers.Take(source.ProvidersCount).ToList();
+            parameters.ServerAddresses = _serverAddresses.Take(source.ServerAddressesCount).ToList();
+            parameters.Hostnames = _hostnames.Take(source.HostnamesCount).ToList();
+            parameters.UpstreamFqdns = _upstreamFqdns.Take(source.UpstreamFqdnsCount).ToList();
+            parameters.HttpCodes = _httpCodes.ToList().GetRandom(source.HttpCodesCount);
+            parameters.Communities = _communties.Take(source.CommunitiesCount).ToList();
+            parameters.UserAgents = _userAgents.ToList();
+            parameters.RequestUris = _requestUris.ToList();
             parameters.LogsCount = source.LogsCount;
             parameters.Path = path;
 
             LogsGenerationJob.Parameters = parameters.Clone();
+        }
+
+        private static HashSet<string> GetRandomIpAddresses(int count)
+        {
+            var result = new HashSet<string>();
+
+            while (result.Count < count)
+            {
+                result.Add(GetRandomIpAddress());
+            }
+
+            return result;
+        }
+
+        public static string GetRandomIpAddress()
+        {
+            var random = new Random();
+            return $"{random.Next(1, 255)}.{random.Next(0, 255)}.{random.Next(0, 255)}.{random.Next(0, 255)}";
         }
     }
 }

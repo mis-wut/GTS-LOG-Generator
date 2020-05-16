@@ -17,6 +17,7 @@ namespace GTSLogGeneratorApi.Infrastructure.RequestExamples
                 ProvidersCount = 2,
                 UpstreamFqdnsCount = 2,
                 HttpCodesCount = 2,
+                CommunitiesCount = 2,
                 IsActive = true,
                 LogsCount = 1000
             };

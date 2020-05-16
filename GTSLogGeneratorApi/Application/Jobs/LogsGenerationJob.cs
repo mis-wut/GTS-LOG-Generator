@@ -51,10 +51,14 @@ namespace GTSLogGeneratorApi.Application.Jobs
                             var upstreamFqdn = parameters.UpstreamFqdns.GetRandomElement();
                             var provider = parameters.Providers.GetRandomElement();
                             var httpCode = parameters.HttpCodes.GetRandomElement();
+                            var community = parameters.Communities.GetRandomElement();
+                            var upstreamRequestStatus = new Random().NextDouble() <= 0.1 ? "MISS" : "HIT";
+                            var userAgent = parameters.UserAgents.GetRandomElement();
+                            var requestUri = parameters.RequestUris.GetRandomElement();
                             var bytesSent = 1000;
 
                             file.WriteLine(
-                                $"\"[22/Mar/2019:14:36:47 +0100]\" \"{timestamp}\" \"{provider}\" \"{upstreamFqdn}\"      \"{serverAddr}\" \"{hostname}\" \"9890462\" \"6\" \"212.160.172.71:51293\" \"PL\"        \"https\" \"GET\" \"/otvppd/OTF/token/timestamp/HH_ID/TERM_ID/14204/pool01/bpk-tv/14204/DASH/dash/canalfilm-audio_198800_pol=196800-74556566476625.dash?bpk-service=LIVE&dt=0\" \"OK\" \"0.026\"     \"{httpCode}\" \"{bytesSent}\" \"47561\" \"video/mp4\" \"47561\" \"-\" \"-\"       \"MISS\" \"MISS\" \"MISS\"    \"192.168.80.102:80\" \"200\" \"0.000\" \"0.025\" \"47561\"  \"c23.default.ocdn.rd.tp.pl\" \"Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101 Firefox/60.0\" \"http://orange-opensource.github.io\" \"http://orange-opensource.github.io/hasplayer.js/1.15.1/samples/Dash-IF/index.html\" \"-\" \"keep-alive\" \"HTTP/1.1\"       \"on\" \"TLSv1.2\" \"c23.default.ocdn.rd.tp.pl\" \".\" \"\"       \"-\" \"-\"         \"38\" \"0\" \"34\" \"3\" \"23445\"       \"6375\" \"5000\" \"10\" \"14480\"");
+                                $"\"[22/Mar/2019:14:36:47 +0100]\" \"{timestamp}\" \"{provider}\" \"{upstreamFqdn}\"      \"{serverAddr}\" \"{hostname}\" \"9890462\" \"6\" \"{community}:80\" \"PL\"        \"https\" \"GET\" \"{requestUri}\" \"OK\" \"0.026\"     \"{httpCode}\" \"{bytesSent}\" \"47561\" \"video/mp4\" \"47561\" \"-\" \"-\"       \"{upstreamRequestStatus}\" \"{upstreamRequestStatus}\" \"{upstreamRequestStatus}\"    \"192.168.80.102:80\" \"200\" \"0.000\" \"0.025\" \"47561\"  \"c23.default.ocdn.rd.tp.pl\" \"{userAgent}\" \"http://orange-opensource.github.io\" \"http://orange-opensource.github.io/hasplayer.js/1.15.1/samples/Dash-IF/index.html\" \"-\" \"keep-alive\" \"HTTP/1.1\"       \"on\" \"TLSv1.2\" \"c23.default.ocdn.rd.tp.pl\" \".\" \"\"       \"-\" \"-\"         \"38\" \"0\" \"34\" \"3\" \"23445\"       \"6375\" \"5000\" \"10\" \"14480\"");
                         }
                     }
                     File.Move($"tmp_{timestamp}.log", Path.Combine(parameters.Path, $"{timestamp}.log"));

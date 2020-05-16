@@ -20,6 +20,8 @@ namespace GTSLogGeneratorApi.Application.UpdateLogsGenerationJobRequest
      
         public int HttpCodesCount { get; set; }
 
+        public int CommunitiesCount { get; set; }
+
         public string Path { get; set; }
     }
 }
