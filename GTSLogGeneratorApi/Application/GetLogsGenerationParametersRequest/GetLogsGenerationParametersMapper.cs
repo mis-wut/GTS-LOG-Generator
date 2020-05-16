@@ -21,6 +21,7 @@ namespace GTSLogGeneratorApi.Application.GetLogsGenerationParametersRequest
                 ServerAddressesCount = source.ServerAddresses.Count,
                 UpstreamFqdnsCount = source.UpstreamFqdns.Count,
                 HttpCodesCount = source.HttpCodes.Count,
+                CommunitiesCount = source.Communities.Count,
                 LogsCount = source.LogsCount,
                 ProvidersCount = source.Providers.Count
             };

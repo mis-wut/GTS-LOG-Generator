@@ -18,6 +18,8 @@ namespace GTSLogGeneratorApi.Application.GetLogsGenerationParametersRequest
 
         public int HttpCodesCount { get; set; }
 
+        public int CommunitiesCount { get; set; }
+
         public string Path { get; set; }
     }
 }

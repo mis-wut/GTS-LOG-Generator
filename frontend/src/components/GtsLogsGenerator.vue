@@ -39,19 +39,22 @@
         </v-slider>
 
         <v-subheader class="pl-0">Number of providers:</v-subheader>
-        <v-slider v-model="providersCount" :thumb-size="24" thumb-label="always" min="1" max="5"></v-slider>
+        <v-slider v-model="providersCount" :thumb-size="24" thumb-label="always" min="1" max="10"></v-slider>
 
         <v-subheader class="pl-0">Number of server addresses:</v-subheader>
-        <v-slider v-model="serverAddressesCount" :thumb-size="24" thumb-label="always" min="1" max="5"></v-slider>
+        <v-slider v-model="serverAddressesCount" :thumb-size="24" thumb-label="always" min="1" max="120"></v-slider>
 
         <v-subheader class="pl-0">Number of hostnames:</v-subheader>
-        <v-slider v-model="hostnamesCount" :thumb-size="24" thumb-label="always" min="1" max="5"></v-slider>
+        <v-slider v-model="hostnamesCount" :thumb-size="24" thumb-label="always" min="1" max="20"></v-slider>
 
         <v-subheader class="pl-0">Number of upstream fqdn:</v-subheader>
-        <v-slider v-model="upstreamFqdnsCount" :thumb-size="24" thumb-label="always" min="1" max="5"></v-slider>
+        <v-slider v-model="upstreamFqdnsCount" :thumb-size="24" thumb-label="always" min="1" max="20"></v-slider>
 
         <v-subheader class="pl-0">Number of http codes:</v-subheader>
-        <v-slider v-model="httpCodesCount" :thumb-size="24" thumb-label="always" min="1" max="5"></v-slider>
+        <v-slider v-model="httpCodesCount" :thumb-size="24" thumb-label="always" min="1" max="16"></v-slider>
+
+        <v-subheader class="pl-0">Number of communities:</v-subheader>
+        <v-slider v-model="communitiesCount" :thumb-size="24" thumb-label="always" min="1" max="20"></v-slider>
       </v-form>
     </v-card-text>
 
@@ -82,6 +85,7 @@ export default {
     upstreamFqdnsCount: 1,
     hostnamesCount: 1,
     httpCodesCount: 1,
+    communitiesCount: 1,
     interval: 5,
     logsCount: 100,
     hitProbability: 50,
@@ -102,6 +106,7 @@ export default {
         this.upstreamFqdnsCount = response.upstreamFqdnsCount;
         this.hostnamesCount = response.hostnamesCount;
         this.httpCodesCount = response.httpCodesCount;
+        this.communitiesCount = response.communitiesCount;
         this.interval = response.interval;
         this.logsCount = response.logsCount;
         this.path = response.path;
@@ -120,6 +125,7 @@ export default {
         upstreamFqdnsCount: this.upstreamFqdnsCount,
         hostnamesCount: this.hostnamesCount,
         httpCodesCount: this.httpCodesCount,
+        communitiesCount: this.communitiesCount,
         path: this.path
       })
         .then(() => {
