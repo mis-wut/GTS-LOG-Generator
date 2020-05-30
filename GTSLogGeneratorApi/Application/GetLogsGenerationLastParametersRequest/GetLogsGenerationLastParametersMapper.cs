@@ -1,18 +1,18 @@
 using GTSLogGeneratorApi.Application.Models;
 using GTSLogGeneratorApi.Infrastructure.Services;
 
-namespace GTSLogGeneratorApi.Application.GetLogsGenerationParametersRequest
+namespace GTSLogGeneratorApi.Application.GetLogsGenerationLastParametersRequest
 {
-    public class GetLogsGenerationParametersMapper : IMapper<LogsGenerationParameters, GetLogsGenerationParametersResponse>
+    public class GetLogsGenerationLastParametersMapper : IMapper<LogsGenerationParameters, GetLogsGenerationLastParametersResponse>
     {
-        public GetLogsGenerationParametersResponse Map(LogsGenerationParameters source)
+        public GetLogsGenerationLastParametersResponse Map(LogsGenerationParameters source)
         {
             if (source.Path == null)
             {
                 return null;
             }
             
-            return new GetLogsGenerationParametersResponse()
+            return new GetLogsGenerationLastParametersResponse()
             {
                 Interval = source.Interval,
                 IsActive = source.IsActive,
@@ -22,6 +22,7 @@ namespace GTSLogGeneratorApi.Application.GetLogsGenerationParametersRequest
                 UpstreamFqdnsCount = source.UpstreamFqdns.Count,
                 HttpCodesCount = source.HttpCodes.Count,
                 CommunitiesCount = source.Communities.Count,
+                LogsFilesCount = source.LogsFilesCount,
                 LogsCount = source.LogsCount,
                 ProvidersCount = source.Providers.Count
             };

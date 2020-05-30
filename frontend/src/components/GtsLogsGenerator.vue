@@ -18,10 +18,23 @@
         <v-text-field
           v-model="interval"
           class="mt-0 pt-0"
-          hide-details
+          single-line
+          type="number"
+          min="1"
+          style="width: 120px"
+        ></v-text-field>
+
+        <p>Estimated logs size: {{ getLogsSize }} MB</p>
+
+        <v-subheader class="pl-0">Number of logs files:</v-subheader>
+        <v-text-field
+          v-model="logsFilesCount"
+          class="mt-0 pt-0"
           single-line
           type="number"
           style="width: 120px"
+          min="1"
+          :rules="fieldRequired"
         ></v-text-field>
 
         <v-subheader class="pl-0">Logs per generation:</v-subheader>
@@ -30,10 +43,11 @@
             <v-text-field
               v-model="logsCount"
               class="mt-0 pt-0"
-              hide-details
               single-line
               type="number"
               style="width: 80px"
+              min="1"
+              :rules="fieldRequired"
             ></v-text-field>
           </template>
         </v-slider>
@@ -59,7 +73,7 @@
     </v-card-text>
 
     <v-card-actions>
-      <v-btn :disabled="!valid" color="success" @click="save">Save</v-btn>
+      <v-btn :disabled="!valid" color="success" @click="save">Run generation</v-btn>
     </v-card-actions>
 
     <v-snackbar v-model="snackbar" :timeout="snackbarTimeout" bottom right :color="snackbarColor">
@@ -87,6 +101,7 @@ export default {
     httpCodesCount: 1,
     communitiesCount: 1,
     interval: 5,
+    logsFilesCount: 20,
     logsCount: 100,
     hitProbability: 50,
     snackbar: false,
@@ -98,7 +113,7 @@ export default {
     snackbarTimeout: 4000
   }),
   mounted() {
-    GtsLogsGeneratorApi.getLogGenerationJobParameters().then(response => {
+    GtsLogsGeneratorApi.getLogGenerationJobLastParameters().then(response => {
       if (response) {
         this.isActive = response.isActive;
         this.providersCount = response.providersCount;
@@ -108,6 +123,7 @@ export default {
         this.httpCodesCount = response.httpCodesCount;
         this.communitiesCount = response.communitiesCount;
         this.interval = response.interval;
+        this.logsFilesCount = response.logsFilesCount;
         this.logsCount = response.logsCount;
         this.path = response.path;
       }
@@ -116,9 +132,10 @@ export default {
   },
   methods: {
     save() {
-      GtsLogsGeneratorApi.updateLogGenerationJob({
+      GtsLogsGeneratorApi.runLogGenerationJob({
         isActive: this.isActive,
         interval: this.interval,
+        logsFilesCount: this.logsFilesCount,
         logsCount: this.logsCount,
         providersCount: this.providersCount,
         serverAddressesCount: this.serverAddressesCount,
@@ -138,6 +155,11 @@ export default {
           this.snackbarColor = this.snackbarErrorColor;
           this.snackbar = true;
         });
+    }
+  },
+  computed: {
+    getLogsSize() {
+      return Math.round(this.logsFilesCount * this.logsCount * 0.75) / 1000;
     }
   }
 };

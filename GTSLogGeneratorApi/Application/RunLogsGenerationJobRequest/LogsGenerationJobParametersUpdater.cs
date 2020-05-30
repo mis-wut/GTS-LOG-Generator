@@ -1,19 +1,18 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Policy;
 using GTSLogGeneratorApi.Application.Jobs;
 using GTSLogGeneratorApi.Application.Models;
 using GTSLogGeneratorApi.Infrastructure.Extensions;
 
-namespace GTSLogGeneratorApi.Application.UpdateLogsGenerationJobRequest
+namespace GTSLogGeneratorApi.Application.RunLogsGenerationJobRequest
 {
-    public interface ILogsGenerationJobParametersUpdater
+    public interface ILogsGenerationJobParametersMapper
     {
-        void Update(UpdateLogsGenerationJobRequest source);
+        LogsGenerationParameters Map(RunLogsGenerationJobRequest source);
     }
     
-    public class LogsGenerationJobParametersUpdater : ILogsGenerationJobParametersUpdater
+    public class LogsGenerationJobParametersMapper : ILogsGenerationJobParametersMapper
     {
         private static readonly HashSet<string> _hostnames = new HashSet<string>
         {
@@ -63,24 +62,29 @@ namespace GTSLogGeneratorApi.Application.UpdateLogsGenerationJobRequest
 
 
 
-        public void Update(UpdateLogsGenerationJobRequest source)
+        public LogsGenerationParameters Map(RunLogsGenerationJobRequest source)
         {
             var path = source.Path.EndsWith("/") ? source.Path : $"{source.Path}/";
-            var parameters = new LogsGenerationParameters(); 
-            parameters.IsActive = source.IsActive;
-            parameters.Interval = source.Interval;
-            parameters.Providers = _providers.Take(source.ProvidersCount).ToList();
-            parameters.ServerAddresses = _serverAddresses.Take(source.ServerAddressesCount).ToList();
-            parameters.Hostnames = _hostnames.Take(source.HostnamesCount).ToList();
-            parameters.UpstreamFqdns = _upstreamFqdns.Take(source.UpstreamFqdnsCount).ToList();
-            parameters.HttpCodes = _httpCodes.ToList().GetRandom(source.HttpCodesCount);
-            parameters.Communities = _communties.Take(source.CommunitiesCount).ToList();
-            parameters.UserAgents = _userAgents.ToList();
-            parameters.RequestUris = _requestUris.ToList();
-            parameters.LogsCount = source.LogsCount;
-            parameters.Path = path;
+            var parameters = new LogsGenerationParameters
+            {
+                IsActive = source.IsActive,
+                Interval = source.Interval,
+                Providers = _providers.Take(source.ProvidersCount).ToList(),
+                ServerAddresses = _serverAddresses.Take(source.ServerAddressesCount).ToList(),
+                Hostnames = _hostnames.Take(source.HostnamesCount).ToList(),
+                UpstreamFqdns = _upstreamFqdns.Take(source.UpstreamFqdnsCount).ToList(),
+                HttpCodes = _httpCodes.ToList().GetRandom(source.HttpCodesCount),
+                Communities = _communties.Take(source.CommunitiesCount).ToList(),
+                UserAgents = _userAgents.ToList(),
+                RequestUris = _requestUris.ToList(),
+                LogsFilesCount = source.LogsFilesCount,
+                LogsCount = source.LogsCount,
+                Path = path
+            };
 
-            LogsGenerationJob.Parameters = parameters.Clone();
+            LogsGenerationJob.LastParameters = parameters.Clone();
+
+            return parameters;
         }
 
         private static HashSet<string> GetRandomIpAddresses(int count)

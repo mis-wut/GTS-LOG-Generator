@@ -11,6 +11,8 @@ namespace GTSLogGeneratorApi.Application.Models
         
         public string Path { get; set; }
 
+        public int LogsFilesCount { get; set; }
+        
         public int LogsCount { get; set; }
 
         public List<string> Providers { get; set; } = new List<string>();

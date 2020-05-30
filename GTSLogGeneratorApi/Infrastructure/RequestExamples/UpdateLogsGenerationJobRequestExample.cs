@@ -1,14 +1,14 @@
+using GTSLogGeneratorApi.Application.RunLogsGenerationJobRequest;
 using GTSLogGeneratorApi.Application.UpdateConfigRequest;
-using GTSLogGeneratorApi.Application.UpdateLogsGenerationJobRequest;
 using Swashbuckle.AspNetCore.Filters;
 
 namespace GTSLogGeneratorApi.Infrastructure.RequestExamples
 {
-    public class UpdateLogsGenerationJobRequestExample : IExamplesProvider<UpdateLogsGenerationJobRequest>
+    public class UpdateLogsGenerationJobRequestExample : IExamplesProvider<RunLogsGenerationJobRequest>
     {
-        public UpdateLogsGenerationJobRequest GetExamples()
+        public RunLogsGenerationJobRequest GetExamples()
         {
-            return new UpdateLogsGenerationJobRequest()
+            return new RunLogsGenerationJobRequest()
             {
                 Path = @"D:\Projects\Logs_data",
                 Interval = 3,

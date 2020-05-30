@@ -13,76 +13,94 @@ namespace GTSLogGeneratorApi.Application.Jobs
     public class LogsGenerationJob : ILogsGenerationJob
     {
         private readonly ILogger<LogsGenerationJob> _logger;
-        public static string Id = "LogsGenerationJob";
 
-        public static LogsGenerationParameters Parameters = new LogsGenerationParameters();
+        public static LogsGenerationParameters LastParameters = new LogsGenerationParameters();
 
         public LogsGenerationJob(ILogger<LogsGenerationJob> logger)
         {
             _logger = logger;
         }
-        
-        public async Task Execute()
+
+        public void Execute(LogsGenerationParameters parameters)
         {
-            while (true)
+            var startGeneration = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+            var jobDirectory = $"./{startGeneration}";
+            Directory.CreateDirectory(jobDirectory);
+
+            try
             {
-                try
+                GenerateLogs(parameters, startGeneration, jobDirectory);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"An error occured durning logs generation: {ex.Message}");
+            }
+            finally
+            {
+                Clean(jobDirectory);
+            }
+        }
+
+        private static void Clean(string jobDirectory)
+        {
+            Directory.Delete(jobDirectory, true);
+        }
+
+        private void GenerateLogs(LogsGenerationParameters parameters, long startGeneration, string jobDirectory)
+        {
+            _logger.LogInformation($"Start generating job {startGeneration}.");
+
+            if (!Directory.Exists(parameters.Path))
+            {
+                throw new InvalidOperationException($"Provided path {parameters.Path} does not exists.");
+            }
+
+            GenerateLogsFiles(parameters, startGeneration, jobDirectory);
+            MoveLogsFiles(parameters, jobDirectory);
+        }
+
+        private void GenerateLogsFiles(LogsGenerationParameters parameters, long startGeneration, string jobDirectory)
+        {
+            for (var j = 0; j < parameters.LogsFilesCount; j++)
+            {
+                var timestamp = startGeneration + parameters.Interval * j;
+                _logger.LogInformation($"Start generating {timestamp}.log");
+                using (StreamWriter file = new StreamWriter($"{jobDirectory}/{timestamp}.log"))
                 {
-                    if (Parameters == null ||
-                        !Parameters.IsActive ||
-                        !Directory.Exists(Parameters.Path) ||
-                        Directory.GetFiles(Parameters.Path).Length >= 20)
+                    for (var i = 1; i <= parameters.LogsCount; i++)
                     {
-                        await Task.Delay(TimeSpan.FromMilliseconds(200));
-                        continue;
+                        var hostname = parameters.Hostnames.GetRandomElement();
+                        var serverAddr = parameters.ServerAddresses.GetRandomElement();
+                        var upstreamFqdn = parameters.UpstreamFqdns.GetRandomElement();
+                        var provider = parameters.Providers.GetRandomElement();
+                        var httpCode = parameters.HttpCodes.GetRandomElement();
+                        var community = parameters.Communities.GetRandomElement();
+                        var upstreamRequestStatus = new Random().NextDouble() <= 0.1 ? "MISS" : "HIT";
+                        var userAgent = parameters.UserAgents.GetRandomElement();
+                        var requestUri = parameters.RequestUris.GetRandomElement();
+                        var bytesSent = 1000;
+
+                        file.WriteLine(
+                            $"\"[22/Mar/2019:14:36:47 +0100]\" \"{timestamp}\" \"{provider}\" \"{upstreamFqdn}\"      \"{serverAddr}\" \"{hostname}\" \"9890462\" \"6\" \"{community}:80\" \"PL\"        \"https\" \"GET\" \"{requestUri}\" \"OK\" \"0.026\"     \"{httpCode}\" \"{bytesSent}\" \"47561\" \"video/mp4\" \"47561\" \"-\" \"-\"       \"{upstreamRequestStatus}\" \"{upstreamRequestStatus}\" \"{upstreamRequestStatus}\"    \"192.168.80.102:80\" \"200\" \"0.000\" \"0.025\" \"47561\"  \"c23.default.ocdn.rd.tp.pl\" \"{userAgent}\" \"http://orange-opensource.github.io\" \"http://orange-opensource.github.io/hasplayer.js/1.15.1/samples/Dash-IF/index.html\" \"-\" \"keep-alive\" \"HTTP/1.1\"       \"on\" \"TLSv1.2\" \"c23.default.ocdn.rd.tp.pl\" \".\" \"\"       \"-\" \"-\"         \"38\" \"0\" \"34\" \"3\" \"23445\"       \"6375\" \"5000\" \"10\" \"14480\"");
                     }
-
-                    var parameters = Parameters.Clone();
-                    var startGeneration = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
-
-                    var timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-                    _logger.LogInformation($"[{DateTime.Now.ToString("hh:mm:ss:fff")}] Start generating file: {timestamp}.log ");
-                    using (StreamWriter file = new StreamWriter($"tmp_{timestamp}.log"))
-                    {
-                        for (var i = 1; i <= parameters.LogsCount; i++)
-                        {
-                            var hostname = parameters.Hostnames.GetRandomElement();
-                            var serverAddr = parameters.ServerAddresses.GetRandomElement();
-                            var upstreamFqdn = parameters.UpstreamFqdns.GetRandomElement();
-                            var provider = parameters.Providers.GetRandomElement();
-                            var httpCode = parameters.HttpCodes.GetRandomElement();
-                            var community = parameters.Communities.GetRandomElement();
-                            var upstreamRequestStatus = new Random().NextDouble() <= 0.1 ? "MISS" : "HIT";
-                            var userAgent = parameters.UserAgents.GetRandomElement();
-                            var requestUri = parameters.RequestUris.GetRandomElement();
-                            var bytesSent = 1000;
-
-                            file.WriteLine(
-                                $"\"[22/Mar/2019:14:36:47 +0100]\" \"{timestamp}\" \"{provider}\" \"{upstreamFqdn}\"      \"{serverAddr}\" \"{hostname}\" \"9890462\" \"6\" \"{community}:80\" \"PL\"        \"https\" \"GET\" \"{requestUri}\" \"OK\" \"0.026\"     \"{httpCode}\" \"{bytesSent}\" \"47561\" \"video/mp4\" \"47561\" \"-\" \"-\"       \"{upstreamRequestStatus}\" \"{upstreamRequestStatus}\" \"{upstreamRequestStatus}\"    \"192.168.80.102:80\" \"200\" \"0.000\" \"0.025\" \"47561\"  \"c23.default.ocdn.rd.tp.pl\" \"{userAgent}\" \"http://orange-opensource.github.io\" \"http://orange-opensource.github.io/hasplayer.js/1.15.1/samples/Dash-IF/index.html\" \"-\" \"keep-alive\" \"HTTP/1.1\"       \"on\" \"TLSv1.2\" \"c23.default.ocdn.rd.tp.pl\" \".\" \"\"       \"-\" \"-\"         \"38\" \"0\" \"34\" \"3\" \"23445\"       \"6375\" \"5000\" \"10\" \"14480\"");
-                        }
-                    }
-                    File.Move($"tmp_{timestamp}.log", Path.Combine(parameters.Path, $"{timestamp}.log"));
-
-                    var endGeneration = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
-                    _logger.LogInformation($"[{DateTime.Now.ToString("hh:mm:ss:fff")}] End generating file: {timestamp}.log ");
-                    var differenceMs = parameters.Interval * 1000 - (endGeneration - startGeneration);
-                    if (differenceMs > 0)
-                    {
-                        _logger.LogInformation($"Sleeping time: {differenceMs}");
-                        await Task.Delay(TimeSpan.FromMilliseconds(differenceMs));
-                    }
-                    _logger.LogInformation($"Job executiom time: {endGeneration - startGeneration}");
                 }
-                catch (Exception ex)
-                {
-                    _logger.LogError($"[LogsGenerationJob]: {ex.Message}");
-                }
+            }
+        }
+
+        private void MoveLogsFiles(LogsGenerationParameters parameters, string jobDirectory)
+        {
+            foreach (var filePath in Directory.EnumerateFiles(jobDirectory))
+            {
+                var filename = Path.GetFileName(filePath);
+                File.Move(filePath, Path.Combine(parameters.Path, filename));
+                Thread.Sleep(TimeSpan.FromSeconds(parameters.Interval));
+                _logger.LogInformation($"[{DateTime.Now:hh:mm:ss:fff}] End moving file: {filename}");
             }
         }
     }
 
     public interface ILogsGenerationJob
     {
-        Task Execute();
+        void Execute(LogsGenerationParameters parameters);
     }
 }
