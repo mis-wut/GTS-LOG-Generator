@@ -5,8 +5,6 @@ namespace GTSLogGeneratorApi.Application.Models
 {
     public class LogsGenerationParameters
     {
-        public bool IsActive { get; set; }
-        
         public int Interval { get; set; }
         
         public string Path { get; set; }
@@ -35,7 +33,6 @@ namespace GTSLogGeneratorApi.Application.Models
         {
             return new LogsGenerationParameters()
             {
-                IsActive = IsActive,
                 Providers = Providers.ToList(),
                 Hostnames = Hostnames.ToList(),
                 ServerAddresses = ServerAddresses.ToList(),

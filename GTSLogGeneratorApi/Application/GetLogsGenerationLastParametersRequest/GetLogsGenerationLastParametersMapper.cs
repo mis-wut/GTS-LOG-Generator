@@ -15,7 +15,6 @@ namespace GTSLogGeneratorApi.Application.GetLogsGenerationLastParametersRequest
             return new GetLogsGenerationLastParametersResponse()
             {
                 Interval = source.Interval,
-                IsActive = source.IsActive,
                 Path = source.Path,
                 HostnamesCount = source.Hostnames.Count,
                 ServerAddressesCount = source.ServerAddresses.Count,

@@ -4,8 +4,6 @@
       <p class="display-1 text--primary">Generator</p>
 
       <v-form v-model="valid">
-        <v-checkbox v-model="isActive" label="Active"></v-checkbox>
-
         <v-text-field
           v-model="path"
           :rules="fieldRequired"
@@ -56,13 +54,25 @@
         <v-slider v-model="providersCount" :thumb-size="24" thumb-label="always" min="1" max="10"></v-slider>
 
         <v-subheader class="pl-0">Number of server addresses:</v-subheader>
-        <v-slider v-model="serverAddressesCount" :thumb-size="24" thumb-label="always" min="1" max="120"></v-slider>
+        <v-slider
+          v-model="serverAddressesCount"
+          :thumb-size="24"
+          thumb-label="always"
+          min="1"
+          max="120"
+        ></v-slider>
 
         <v-subheader class="pl-0">Number of hostnames:</v-subheader>
         <v-slider v-model="hostnamesCount" :thumb-size="24" thumb-label="always" min="1" max="20"></v-slider>
 
         <v-subheader class="pl-0">Number of upstream fqdn:</v-subheader>
-        <v-slider v-model="upstreamFqdnsCount" :thumb-size="24" thumb-label="always" min="1" max="20"></v-slider>
+        <v-slider
+          v-model="upstreamFqdnsCount"
+          :thumb-size="24"
+          thumb-label="always"
+          min="1"
+          max="20"
+        ></v-slider>
 
         <v-subheader class="pl-0">Number of http codes:</v-subheader>
         <v-slider v-model="httpCodesCount" :thumb-size="24" thumb-label="always" min="1" max="16"></v-slider>
@@ -91,7 +101,6 @@ export default {
   data: () => ({
     loaded: false,
     valid: false,
-    isActive: false,
     fieldRequired: [v => !!v || "Field is required."],
     path: "",
     providersCount: 1,
@@ -115,7 +124,6 @@ export default {
   mounted() {
     GtsLogsGeneratorApi.getLogGenerationJobLastParameters().then(response => {
       if (response) {
-        this.isActive = response.isActive;
         this.providersCount = response.providersCount;
         this.serverAddressesCount = response.serverAddressesCount;
         this.upstreamFqdnsCount = response.upstreamFqdnsCount;
@@ -133,7 +141,6 @@ export default {
   methods: {
     save() {
       GtsLogsGeneratorApi.runLogGenerationJob({
-        isActive: this.isActive,
         interval: this.interval,
         logsFilesCount: this.logsFilesCount,
         logsCount: this.logsCount,

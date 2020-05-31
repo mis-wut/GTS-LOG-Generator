@@ -4,8 +4,6 @@ namespace GTSLogGeneratorApi.Application.RunLogsGenerationJobRequest
 {
     public class RunLogsGenerationJobRequest : IRequest
     {
-        public bool IsActive { get; set; }
-
         public int Interval { get; set; }
 
         public int LogsFilesCount { get; set; }

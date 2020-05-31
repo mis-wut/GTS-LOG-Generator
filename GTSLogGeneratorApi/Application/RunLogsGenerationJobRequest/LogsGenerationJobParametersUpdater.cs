@@ -67,7 +67,6 @@ namespace GTSLogGeneratorApi.Application.RunLogsGenerationJobRequest
             var path = source.Path.EndsWith("/") ? source.Path : $"{source.Path}/";
             var parameters = new LogsGenerationParameters
             {
-                IsActive = source.IsActive,
                 Interval = source.Interval,
                 Providers = _providers.Take(source.ProvidersCount).ToList(),
                 ServerAddresses = _serverAddresses.Take(source.ServerAddressesCount).ToList(),
