@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -24,7 +26,7 @@ namespace GTSLogGeneratorApi.Application.Jobs
         public void Execute(LogsGenerationParameters parameters)
         {
             var startGeneration = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
-            var jobDirectory = $"./{startGeneration}";
+            var jobDirectory = $"{startGeneration}";
             Directory.CreateDirectory(jobDirectory);
 
             try
@@ -65,7 +67,7 @@ namespace GTSLogGeneratorApi.Application.Jobs
             {
                 var timestamp = startGeneration + parameters.Interval * j;
                 _logger.LogInformation($"Start generating {timestamp}.log");
-                using (StreamWriter file = new StreamWriter($"{jobDirectory}/{timestamp}.log"))
+                using (StreamWriter file = new StreamWriter(Path.Combine(jobDirectory, $"{timestamp}.log")))
                 {
                     for (var i = 1; i <= parameters.LogsCount; i++)
                     {
@@ -89,13 +91,22 @@ namespace GTSLogGeneratorApi.Application.Jobs
 
         private void MoveLogsFiles(LogsGenerationParameters parameters, string jobDirectory)
         {
-            foreach (var filePath in Directory.EnumerateFiles(jobDirectory))
+            var files = GetFiles(jobDirectory);
+            foreach (var filename in files)
             {
-                var filename = Path.GetFileName(filePath);
-                File.Move(filePath, Path.Combine(parameters.Path, filename));
+                File.Move(Path.Combine(jobDirectory, filename), Path.Combine(parameters.Path, filename));
                 Thread.Sleep(TimeSpan.FromSeconds(parameters.Interval));
                 _logger.LogInformation($"[{DateTime.Now:hh:mm:ss:fff}] End moving file: {filename}");
             }
+        }
+
+        private IEnumerable<string> GetFiles(string path)
+        {
+            DirectoryInfo dir = new DirectoryInfo(path);
+            var dirs = (from file in dir.EnumerateFiles()
+                orderby file.CreationTime
+                select file.Name).Distinct();
+            return dirs;
         }
     }
 
