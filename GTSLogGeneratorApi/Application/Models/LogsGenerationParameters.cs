@@ -43,6 +43,7 @@ namespace GTSLogGeneratorApi.Application.Models
                 RequestUris = RequestUris.ToList(),
                 Interval = Interval,
                 Path = Path,
+                LogsFilesCount = LogsFilesCount,
                 LogsCount = LogsCount
             };
         }
