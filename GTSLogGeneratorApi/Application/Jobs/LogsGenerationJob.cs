@@ -25,7 +25,7 @@ namespace GTSLogGeneratorApi.Application.Jobs
 
         public void Execute(LogsGenerationParameters parameters)
         {
-            var startGeneration = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+            var startGeneration = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
             var jobDirectory = $"{startGeneration}";
             Directory.CreateDirectory(jobDirectory);
 
