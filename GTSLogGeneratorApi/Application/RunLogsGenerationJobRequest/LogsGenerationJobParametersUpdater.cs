@@ -114,10 +114,11 @@ namespace GTSLogGeneratorApi.Application.RunLogsGenerationJobRequest
         private static HashSet<string> GetRandomIpAddresses(int count)
         {
             var result = new HashSet<string>();
-
+            var random = new Random();
+            
             for(var i = 1; i <= count; i++)
             {
-                result.Add($"1.1.1.{i}");
+                result.Add($"{i}.{i}.{i}.{random.Next(0, 255)}");
             }
 
             return result;
