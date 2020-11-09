@@ -13,6 +13,8 @@ namespace GTSLogGeneratorApi.Application.Models
         
         public int LogsCount { get; set; }
 
+        public List<string> ContentClusters { get; set; } = new List<string>();
+        
         public List<string> Providers { get; set; } = new List<string>();
 
         public List<string> ServerAddresses { get; set; } = new List<string>();
@@ -33,6 +35,7 @@ namespace GTSLogGeneratorApi.Application.Models
         {
             return new LogsGenerationParameters()
             {
+                ContentClusters = ContentClusters.ToList(),
                 Providers = Providers.ToList(),
                 Hostnames = Hostnames.ToList(),
                 ServerAddresses = ServerAddresses.ToList(),

@@ -9,6 +9,8 @@ namespace GTSLogGeneratorApi.Application.GetLogsGenerationLastParametersRequest
         public int LogsFilesCount { get; set; }
 
         public int LogsCount { get; set; }
+        
+        public int ContentClustersCount { get; set; }
 
         public int ServerAddressesCount { get; set; }
         

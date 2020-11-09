@@ -26,6 +26,30 @@ namespace GTSLogGeneratorApi.Application.RunLogsGenerationJobRequest
             "efgh", "jkloap", "mkrto", "azamqw", "xasdg"
         };
 
+        private static readonly HashSet<string> _contentClusters = new HashSet<string>()
+        {
+            "c10.default.ocdn.rd.tp.pl",
+            "c11.default.ocdn.rd.tp.pl",
+            "c12.default.ocdn.rd.tp.pl",
+            "c13.default.ocdn.rd.tp.pl",
+            "c14.default.ocdn.rd.tp.pl",
+            "c15.default.ocdn.rd.tp.pl",
+            "c16.default.ocdn.rd.tp.pl",
+            "c17.default.ocdn.rd.tp.pl",
+            "c18.default.ocdn.rd.tp.pl",
+            "c19.default.ocdn.rd.tp.pl",
+            "c20.default.ocdn.rd.tp.pl",
+            "c21.default.ocdn.rd.tp.pl",
+            "c22.default.ocdn.rd.tp.pl",
+            "c23.default.ocdn.rd.tp.pl",
+            "c24.default.ocdn.rd.tp.pl",
+            "c25.default.ocdn.rd.tp.pl",
+            "c26.default.ocdn.rd.tp.pl",
+            "c27.default.ocdn.rd.tp.pl",
+            "c28.default.ocdn.rd.tp.pl",
+            "c29.default.ocdn.rd.tp.pl"
+        };
+        
         private static readonly HashSet<string> _serverAddresses = GetRandomIpAddresses(120);
 
         private static readonly HashSet<string> _upstreamFqdns = GetRandomIpAddresses(20);
@@ -68,6 +92,7 @@ namespace GTSLogGeneratorApi.Application.RunLogsGenerationJobRequest
             var parameters = new LogsGenerationParameters
             {
                 Interval = source.Interval,
+                ContentClusters = _contentClusters.Take(source.ContentClustersCount).ToList(),
                 Providers = _providers.Take(source.ProvidersCount).ToList(),
                 ServerAddresses = _serverAddresses.Take(source.ServerAddressesCount).ToList(),
                 Hostnames = _hostnames.Take(source.HostnamesCount).ToList(),
@@ -90,18 +115,12 @@ namespace GTSLogGeneratorApi.Application.RunLogsGenerationJobRequest
         {
             var result = new HashSet<string>();
 
-            while (result.Count < count)
+            for(var i = 1; i <= count; i++)
             {
-                result.Add(GetRandomIpAddress());
+                result.Add($"1.1.1.{i}");
             }
 
             return result;
-        }
-
-        public static string GetRandomIpAddress()
-        {
-            var random = new Random();
-            return $"{random.Next(1, 255)}.{random.Next(0, 255)}.{random.Next(0, 255)}.{random.Next(0, 255)}";
         }
     }
 }

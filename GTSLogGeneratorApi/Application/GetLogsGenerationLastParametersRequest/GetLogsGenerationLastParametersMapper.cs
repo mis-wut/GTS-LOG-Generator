@@ -23,7 +23,8 @@ namespace GTSLogGeneratorApi.Application.GetLogsGenerationLastParametersRequest
                 CommunitiesCount = source.Communities.Count,
                 LogsFilesCount = source.LogsFilesCount,
                 LogsCount = source.LogsCount,
-                ProvidersCount = source.Providers.Count
+                ProvidersCount = source.Providers.Count,
+                ContentClustersCount = source.ContentClusters.Count
             };
         }
     }

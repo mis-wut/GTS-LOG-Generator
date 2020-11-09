@@ -50,8 +50,23 @@
           </template>
         </v-slider>
 
+        <v-subheader class="pl-0">Number of content clusters:</v-subheader>
+        <v-slider
+          v-model="contentClustersCount"
+          :thumb-size="24"
+          thumb-label="always"
+          min="1"
+          max="20"
+        ></v-slider>
+
         <v-subheader class="pl-0">Number of providers:</v-subheader>
-        <v-slider v-model="providersCount" :thumb-size="24" thumb-label="always" min="1" max="10"></v-slider>
+        <v-slider
+          v-model="providersCount"
+          :thumb-size="24"
+          thumb-label="always"
+          min="1"
+          max="10"
+        ></v-slider>
 
         <v-subheader class="pl-0">Number of server addresses:</v-subheader>
         <v-slider
@@ -63,7 +78,13 @@
         ></v-slider>
 
         <v-subheader class="pl-0">Number of hostnames:</v-subheader>
-        <v-slider v-model="hostnamesCount" :thumb-size="24" thumb-label="always" min="1" max="20"></v-slider>
+        <v-slider
+          v-model="hostnamesCount"
+          :thumb-size="24"
+          thumb-label="always"
+          min="1"
+          max="20"
+        ></v-slider>
 
         <v-subheader class="pl-0">Number of upstream fqdn:</v-subheader>
         <v-slider
@@ -75,18 +96,38 @@
         ></v-slider>
 
         <v-subheader class="pl-0">Number of http codes:</v-subheader>
-        <v-slider v-model="httpCodesCount" :thumb-size="24" thumb-label="always" min="1" max="16"></v-slider>
+        <v-slider
+          v-model="httpCodesCount"
+          :thumb-size="24"
+          thumb-label="always"
+          min="1"
+          max="16"
+        ></v-slider>
 
         <v-subheader class="pl-0">Number of communities:</v-subheader>
-        <v-slider v-model="communitiesCount" :thumb-size="24" thumb-label="always" min="1" max="20"></v-slider>
+        <v-slider
+          v-model="communitiesCount"
+          :thumb-size="24"
+          thumb-label="always"
+          min="1"
+          max="20"
+        ></v-slider>
       </v-form>
     </v-card-text>
 
     <v-card-actions>
-      <v-btn :disabled="!valid" color="success" @click="save">Run generation</v-btn>
+      <v-btn :disabled="!valid" color="success" @click="save"
+        >Run generation</v-btn
+      >
     </v-card-actions>
 
-    <v-snackbar v-model="snackbar" :timeout="snackbarTimeout" bottom right :color="snackbarColor">
+    <v-snackbar
+      v-model="snackbar"
+      :timeout="snackbarTimeout"
+      bottom
+      right
+      :color="snackbarColor"
+    >
       {{ snackbarText }}
       <v-btn dark text @click="snackbar = false">Close</v-btn>
     </v-snackbar>
@@ -101,8 +142,9 @@ export default {
   data: () => ({
     loaded: false,
     valid: false,
-    fieldRequired: [v => !!v || "Field is required."],
+    fieldRequired: [(v) => !!v || "Field is required."],
     path: "",
+    contentClustersCount: 1,
     providersCount: 1,
     serverAddressesCount: 1,
     upstreamFqdnsCount: 1,
@@ -119,11 +161,12 @@ export default {
     snackbarErrorColor: "error",
     snackbarText: "",
     snackbarColor: "success",
-    snackbarTimeout: 4000
+    snackbarTimeout: 4000,
   }),
   mounted() {
-    GtsLogsGeneratorApi.getLogGenerationJobLastParameters().then(response => {
+    GtsLogsGeneratorApi.getLogGenerationJobLastParameters().then((response) => {
       if (response) {
+        this.contentClustersCount = response.contentClustersCount;
         this.providersCount = response.providersCount;
         this.serverAddressesCount = response.serverAddressesCount;
         this.upstreamFqdnsCount = response.upstreamFqdnsCount;
@@ -144,30 +187,31 @@ export default {
         interval: this.interval,
         logsFilesCount: this.logsFilesCount,
         logsCount: this.logsCount,
+        contentClustersCount: this.contentClustersCount,
         providersCount: this.providersCount,
         serverAddressesCount: this.serverAddressesCount,
         upstreamFqdnsCount: this.upstreamFqdnsCount,
         hostnamesCount: this.hostnamesCount,
         httpCodesCount: this.httpCodesCount,
         communitiesCount: this.communitiesCount,
-        path: this.path
+        path: this.path,
       })
         .then(() => {
           this.snackbarText = this.snackbarSuccessMessage;
           this.snackbarColor = this.snackbarSuccessColor;
           this.snackbar = true;
         })
-        .catch(error => {
+        .catch((error) => {
           this.snackbarText = error.response.data;
           this.snackbarColor = this.snackbarErrorColor;
           this.snackbar = true;
         });
-    }
+    },
   },
   computed: {
     getLogsSize() {
       return Math.round(this.logsFilesCount * this.logsCount * 0.75) / 1000;
-    }
-  }
+    },
+  },
 };
 </script>
