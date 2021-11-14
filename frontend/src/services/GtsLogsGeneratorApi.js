@@ -9,18 +9,18 @@ export default {
     return `http://${process.env.VUE_APP_HOST}:9999/`;
   },
 
-  getLogGenerationJobParameters() {
+  getLogGenerationJobLastParameters() {
     return axios
-      .get("LogsGeneration/GetLogGenerationJobParameters")
+      .get("LogsGeneration/GetLogGenerationJobLastParameters")
       .then((response) => {
         return response.data;
       });
   },
 
-  updateLogGenerationJob(updateLogGenerationJobRequest) {
-    return axios.put(
-      "LogsGeneration/UpdateLogGenerationJob",
-      updateLogGenerationJobRequest
+  runLogGenerationJob(runLogGenerationJobRequest) {
+    return axios.post(
+      "LogsGeneration/RunLogGenerationJob",
+      runLogGenerationJobRequest
     );
   },
 

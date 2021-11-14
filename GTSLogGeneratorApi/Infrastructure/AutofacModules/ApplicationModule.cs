@@ -1,8 +1,8 @@
 using Autofac;
 using GTSLogGeneratorApi.Application.Jobs;
 using GTSLogGeneratorApi.Application.Models;
+using GTSLogGeneratorApi.Application.RunLogsGenerationJobRequest;
 using GTSLogGeneratorApi.Application.UpdateConfigRequest;
-using GTSLogGeneratorApi.Application.UpdateLogsGenerationJobRequest;
 
 namespace GTSLogGeneratorApi.Infrastructure.AutofacModules
 {
@@ -11,7 +11,7 @@ namespace GTSLogGeneratorApi.Infrastructure.AutofacModules
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterType<LogsGenerationJob>().As<ILogsGenerationJob>();
-            builder.RegisterType<LogsGenerationJobParametersUpdater>().As<ILogsGenerationJobParametersUpdater>();
+            builder.RegisterType<LogsGenerationJobParametersMapper>().As<ILogsGenerationJobParametersMapper>();
             builder.RegisterInstance(new ConfigParameters());
             builder.RegisterType<ConfigParametersUpdater>().As<IConfigParametersUpdater>();
         }

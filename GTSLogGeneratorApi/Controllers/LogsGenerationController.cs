@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
-using GTSLogGeneratorApi.Application.GetLogsGenerationParametersRequest;
-using GTSLogGeneratorApi.Application.UpdateLogsGenerationJobRequest;
+using GTSLogGeneratorApi.Application.GetLogsGenerationLastParametersRequest;
+using GTSLogGeneratorApi.Application.RunLogsGenerationJobRequest;
+using Hangfire;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,19 +18,25 @@ namespace GTSLogGeneratorApi.Controllers
             _mediator = mediator;
         }
 
-        [HttpPut]
-        [Route("UpdateLogGenerationJob")]
-        public async Task<ActionResult> UpdateLogGenerationJob(UpdateLogsGenerationJobRequest request)
+        [HttpPost]
+        [Route("RunLogGenerationJob")]
+        public async Task<ActionResult> RunLogGenerationJob(RunLogsGenerationJobRequest request)
         {
+            var hangfireMonitoringApi = JobStorage.Current.GetMonitoringApi();
+            if (hangfireMonitoringApi.ProcessingCount() > 0)
+            {
+                return BadRequest("Wait for logs generation finish to process next logs generation.");
+            }
+
             await _mediator.Send(request);
             return Ok();
         }
         
         [HttpGet]
-        [Route("GetLogGenerationJobParameters")]
-        public async Task<ActionResult<GetLogsGenerationParametersResponse>> GetLogGenerationJobParameters()
+        [Route("GetLogGenerationJobLastParameters")]
+        public async Task<ActionResult<GetLogsGenerationLastParametersResponse>> GetLogGenerationJobLastParameters()
         {
-            return await _mediator.Send(new GetLogsGenerationParametersRequest());
+            return await _mediator.Send(new GetLogsGenerationLastParametersRequest());
         }
     }
 }

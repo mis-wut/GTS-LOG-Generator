@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Swashbuckle.AspNetCore.Filters;
 using Swashbuckle.AspNetCore.Swagger;
 
@@ -29,7 +30,7 @@ namespace GTSLogGeneratorApi
 
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            //services.AddMemoryHangfire();
+            services.AddMemoryHangfire();
             services.AddCors(options => options.AddPolicy("ApiCorsPolicy", builder =>
             {
                 builder.AllowAnyOrigin()
@@ -44,7 +45,7 @@ namespace GTSLogGeneratorApi
             services.AddSwaggerExamplesFromAssemblyOf<UpdateConfigRequestExample>();
             services.AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-            
+
             // Autofac
             var containerBuilder = new ContainerBuilder();
             containerBuilder.RegisterModule<MediatorModule>();
@@ -55,9 +56,9 @@ namespace GTSLogGeneratorApi
             return new AutofacServiceProvider(container);
         }
           
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILogsGenerationJob job)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            //app.UseHangfireDashboard();
+            app.UseHangfireDashboard();
             app.UseMiddleware<ErrorHandlingMiddleware>();
             app.UseCors("ApiCorsPolicy");
             app.UseSwagger();
@@ -66,7 +67,6 @@ namespace GTSLogGeneratorApi
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "GTS-Log Generator");
             });
 
-            Task.Run(job.Execute);
             app.UseMvc();
         }
     }

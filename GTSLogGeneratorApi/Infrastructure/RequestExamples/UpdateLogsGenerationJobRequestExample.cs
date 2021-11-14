@@ -1,22 +1,25 @@
+using GTSLogGeneratorApi.Application.RunLogsGenerationJobRequest;
 using GTSLogGeneratorApi.Application.UpdateConfigRequest;
-using GTSLogGeneratorApi.Application.UpdateLogsGenerationJobRequest;
 using Swashbuckle.AspNetCore.Filters;
 
 namespace GTSLogGeneratorApi.Infrastructure.RequestExamples
 {
-    public class UpdateLogsGenerationJobRequestExample : IExamplesProvider<UpdateLogsGenerationJobRequest>
+    public class UpdateLogsGenerationJobRequestExample : IExamplesProvider<RunLogsGenerationJobRequest>
     {
-        public UpdateLogsGenerationJobRequest GetExamples()
+        public RunLogsGenerationJobRequest GetExamples()
         {
-            return new UpdateLogsGenerationJobRequest()
+            return new RunLogsGenerationJobRequest()
             {
-                Path = "/home/krystian/Documents/Magisterka/GtsFolders/logs_data",
+                Path = @"D:\Projects\Logs_data",
                 Interval = 3,
-                ChannelsCount = 2,
-                CitiesCount = 2,
-                IsActive = false,
+                HostnamesCount = 2,
+                ServerAddressesCount = 2,
+                ProvidersCount = 2,
+                UpstreamFqdnsCount = 2,
+                HttpCodesCount = 2,
+                CommunitiesCount = 2,
                 LogsCount = 1000,
-                ProvidersCount = 2
+                ContentClustersCount = 10
             };
         }
     }
