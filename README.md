@@ -5,7 +5,7 @@ Porty na których uruchomione są serwisy:
 5000 - backend
 9999 - influx
 
-Aby skonfigurować influxa od zera wystarczy utworzyć dwa buckety "gts_logs_metrics" i "gts_system_metrics", utworzyć token służący do autoryzacji oraz zaktualizować wartość tokena w konfiguracji GTS-LOG. 
+Aby skonfigurować influxa od zera wystarczy utworzyć dwa buckety "gts_logs_data" i "gts_system_metrics", utworzyć token służący do autoryzacji oraz zaktualizować wartość tokena w konfiguracji GTS-LOG. 
 
 Uruchamianie backendu generatora:
 1.  Przejść do katalogu /home/rytelk/Magisterka/GTSLogGenerator/deployment_package/out
